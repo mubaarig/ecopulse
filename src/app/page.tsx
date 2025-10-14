@@ -1,6 +1,6 @@
 import { CompanySearch } from '@/components/features/company-search';
-import { StatsGrid } from '@/components/features/stats-grid';
-import { RecentSearches } from '@/components/features/recent-searches';
+// import { StatsGrid } from '@/components/features/stats-grid';
+// import { RecentSearches } from '@/components/features/recent-searches';
 
 export default function DashboardPage() {
   return (
@@ -19,10 +19,10 @@ export default function DashboardPage() {
       <CompanySearch />
 
       {/* Stats Preview */}
-      <StatsGrid />
+      {/* <StatsGrid /> */}
 
       {/* Recent Searches */}
-      <RecentSearches />
+      {/* <RecentSearches /> */}
     </div>
   );
 }

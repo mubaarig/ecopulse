@@ -1,3 +1,7 @@
+EcoPulse is a dynamic web application that helps users (both investors and conscious consumers) visualize and analyze the environmental, social, and governance (ESG) impact of public companies and their products. It goes beyond static scores by using predictive AI to forecast future ESG performance and maps corporate supply chains to reveal environmental risks.
+
+
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
