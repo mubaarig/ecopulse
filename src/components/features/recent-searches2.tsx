@@ -100,7 +100,7 @@ const toneStyles: Record<
   watch: { text: 'text-amber-700', background: 'bg-amber-50', label: 'Monitoring' },
 };
 
-export function RecentSearches() {
+export function RecentSearches2() {
   return (
     <section aria-labelledby="recent-searches" className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
       <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
