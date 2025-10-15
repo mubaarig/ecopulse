@@ -1,7 +1,8 @@
 import { CompanySearch } from '@/components/features/company-search';
-// import { StatsGrid } from '@/components/features/stats-grid';
-// import { RecentSearches } from '@/components/features/recent-searches';
-
+import { StatsGrid } from '@/components/features/stats-grid';
+import { StatsGrid2 } from '@/components/features/stats-grid2';
+import { RecentSearches } from '@/components/features/recent-search';
+import { RecentSearches2 } from '@/components/features/recent-searches2';
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
@@ -16,13 +17,19 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Search */}
-      <CompanySearch />
+      <CompanySearch/>
 
       {/* Stats Preview */}
-      {/* <StatsGrid /> */}
+      <StatsGrid />
+      <hr/>
+      {/* <StatsGrid2/> */}
 
       {/* Recent Searches */}
-      {/* <RecentSearches /> */}
+      <RecentSearches />
+            <hr/>
+
+      {/* <RecentSearches2 /> */}
+
     </div>
   );
 }
