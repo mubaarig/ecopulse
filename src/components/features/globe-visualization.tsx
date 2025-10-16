@@ -1,10 +1,9 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { useFrame, useThree } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, Sphere, Stars } from "@react-three/drei";
 import * as THREE from "three";
-import { Canvas } from "@react-three/fiber";
 
 interface GlobeVisualizationProps {
   supplyChainData: Array<{
@@ -17,12 +16,9 @@ interface GlobeVisualizationProps {
 
 function Globe({ supplyChainData }: GlobeVisualizationProps) {
   const globeRef = useRef<THREE.Mesh>(null);
-  const pointsGroupRef = useRef<THREE.Group>(null);
-  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
-  // Convert country names to coordinates (simplified)
   const getCountryCoordinates = (country: string) => {
-    const coordinates: { [key: string]: [number, number] } = {
+    const coordinates: Record<string, [number, number]> = {
       "United States": [40.0, -100.0],
       China: [35.0, 105.0],
       Vietnam: [16.0, 106.0],
@@ -34,13 +30,12 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
     return coordinates[country] || [0, 0];
   };
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (globeRef.current) {
       globeRef.current.rotation.y += delta * 0.1;
     }
   });
 
-  // Convert lat/long to 3D position
   const latLongToVector3 = (lat: number, lon: number, radius: number) => {
     const phi = (90 - lat) * (Math.PI / 180);
     const theta = (lon + 180) * (Math.PI / 180);
@@ -52,12 +47,11 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
 
   return (
     <>
-      <OrbitControls enableZoom={true} enablePan={true} />
+      <OrbitControls enableZoom enablePan />
       <Stars radius={100} depth={50} count={5000} factor={4} />
       <ambientLight intensity={0.5} />
       <pointLight position={[10, 10, 10]} intensity={1.5} />
 
-      {/* Globe Sphere */}
       <Sphere ref={globeRef} args={[5, 32, 32]}>
         <meshPhongMaterial
           color="#1e3a8a"
@@ -67,8 +61,7 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
         />
       </Sphere>
 
-      {/* Supply Chain Points */}
-      <group ref={pointsGroupRef}>
+      <group>
         {supplyChainData.map((country, index) => {
           const [lat, lon] = getCountryCoordinates(country.country);
           const position = latLongToVector3(lat, lon, 5.1);
@@ -81,10 +74,8 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
 
           return (
             <mesh
-              key={index}
+              key={`${country.country}-${index}`}
               position={position}
-              onPointerOver={() => setHoveredPoint(index)}
-              onPointerOut={() => setHoveredPoint(null)}
             >
               <sphereGeometry args={[0.1, 8, 8]} />
               <meshBasicMaterial color={riskColor} />
@@ -109,7 +100,7 @@ export function GlobeVisualization({
     return (
       <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto" />
           <p className="mt-2 text-sm text-gray-500">
             Loading 3D Visualization...
           </p>
