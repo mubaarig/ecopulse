@@ -4,6 +4,7 @@ import { useRef, useEffect, useState } from "react";
 import { useFrame, useThree } from "@react-three/fiber";
 import { OrbitControls, Sphere, Stars } from "@react-three/drei";
 import * as THREE from "three";
+import { Canvas } from "@react-three/fiber";
 
 interface GlobeVisualizationProps {
   supplyChainData: Array<{
@@ -118,12 +119,12 @@ export function GlobeVisualization({
   }
 
   return (
-    <div className="h-64 bg-black rounded-lg">
+    <div className="h-64 bg-black rounded-lg relative">
+      <Canvas>
+        <Globe supplyChainData={supplyChainData} />
+      </Canvas>
       <div className="text-white text-xs p-2 absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent">
         Supply Chain Visualization - Red: High Risk, Yellow: Medium, Green: Low
-      </div>
-      <div className="h-full w-full">
-        <iframe src="/globe.html" className="w-full h-full rounded-lg" />
       </div>
     </div>
   );
