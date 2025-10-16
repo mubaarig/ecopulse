@@ -4,6 +4,12 @@ import { Building2, ArrowUp, ArrowDown, Minus } from 'lucide-react';
 import { mockData } from '@/lib/mock-data';
 
 const recentCompanies = mockData.getCompanies().slice(0, 4);
+const recentSnapshots = [
+  { score: 83, trend: 'up' as const },
+  { score: 78, trend: 'stable' as const },
+  { score: 71, trend: 'down' as const },
+  { score: 86, trend: 'up' as const },
+];
 
 export function RecentSearches() {
   return (
@@ -13,11 +19,10 @@ export function RecentSearches() {
       </h2>
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {recentCompanies.map((company) => {
-          // Generate a mock trend for demonstration
-          const trend = Math.random() > 0.6 ? 'up' : Math.random() > 0.3 ? 'down' : 'stable';
-          const score = Math.floor(Math.random() * 30) + 60; // 60-90
-          
+        {recentCompanies.map((company, index) => {
+          const snapshot = recentSnapshots[index] ?? recentSnapshots[recentSnapshots.length - 1];
+          const { trend, score } = snapshot;
+
           return (
             <button
               key={company.id}
