@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
-import { Globe, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Globe, AlertTriangle } from 'lucide-react';
 
 interface SupplyChainMapProps {
   ticker: string;
