@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { CompanyDetails } from "@/types";
-import { ESGScoreCard } from "./esg-score-card";
-import { HistoricalChart } from "./historical-chart";
-import { SupplyChainMap } from "./supply-chain-map";
-import { PredictiveAnalysis } from "./predictive-analysis";
+import { CompanyDetails } from '@/types';
+import { CompanyHeader } from './company-header';
+import { ESGScoreCard } from './esg-score-card';
+import { HistoricalChart } from './historical-chart';
+import { SupplyChainMap } from './supply-chain-map';
+import { PredictiveAnalysis } from './predictive-analysis';
+import { ScoreBreakdown } from './score-breakdown';
 
 interface CompanyDashboardProps {
   company: CompanyDetails;
@@ -12,17 +14,26 @@ interface CompanyDashboardProps {
 
 export function CompanyDashboard({ company }: CompanyDashboardProps) {
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      {/* Left column - ESG Scores and Predictive Analysis */}
-      <div className="lg:col-span-1 space-y-6">
-        <ESGScoreCard score={company.esgScore} />
-        <PredictiveAnalysis company={company} />
-      </div>
+    <div className="space-y-6">
+      {/* Company Header */}
+      <CompanyHeader company={company} />
+      
+      {/* Main Dashboard Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column - Scores & Breakdown */}
+        <div className="lg:col-span-1 space-y-6">
+          <ESGScoreCard score={company.esgScore} />
+          <ScoreBreakdown score={company.esgScore} />
+        </div>
 
-      {/* Right column - Charts and Map */}
-      <div className="lg:col-span-2 space-y-6">
-        <HistoricalChart ticker={company.ticker} />
-        <SupplyChainMap ticker={company.ticker} />
+        {/* Right Column - Charts & Visualizations */}
+        <div className="lg:col-span-2 space-y-6">
+          <HistoricalChart ticker={company.ticker} />
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <PredictiveAnalysis ticker={company.ticker} />
+            <SupplyChainMap ticker={company.ticker} />
+          </div>
+        </div>
       </div>
     </div>
   );

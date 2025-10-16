@@ -21,3 +21,18 @@ export interface CompanyDetails extends Company {
   marketCap?: number;
   headquarters?: string;
 }
+
+export interface HistoricalDataPoint {
+  date: string;
+  score: number;
+  environmental: number;
+  social: number;
+  governance: number;
+}
+
+export interface SupplyChainData {
+  country: string;
+  emission: number;
+  riskLevel: 'low' | 'medium' | 'high';
+  facilities: number;
+}
