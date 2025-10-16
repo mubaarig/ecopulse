@@ -175,7 +175,7 @@ export default function DashboardPage() {
               incentives.
             </p>
             <div className="mt-6 flex h-40 items-end gap-2">
-              {[32, 40, 44, 52, 58, 61, 67, 72, 75, 78, 82, 86].map((value, index) => (
+              {[32, 40, 44, 52, 58, 61, 67, 72, 75, 78, 82, 86].map((value) => (
                 <div
                   key={value}
                   className="flex-1 rounded-full bg-gradient-to-t from-white/40 to-white/90"

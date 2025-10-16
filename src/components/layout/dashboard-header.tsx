@@ -1,6 +1,6 @@
 'use client';
 
-import { Search, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { CompanySearch } from '@/components/features/company-search';
 

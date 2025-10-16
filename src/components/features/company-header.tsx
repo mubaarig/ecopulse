@@ -2,7 +2,7 @@
 
 import { CompanyDetails } from '@/types';
 import { Building2, MapPin, TrendingUp, TrendingDown, Minus } from 'lucide-react';
-import { formatNumber, formatPercentageChange } from '@/lib/utils';
+import { formatNumber } from '@/lib/utils';
 
 interface CompanyHeaderProps {
   company: CompanyDetails;

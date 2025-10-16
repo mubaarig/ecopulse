@@ -15,6 +15,7 @@ const COMPANY_DATA = [
 
 // Generate realistic ESG scores with trends
 function generateESGScore(companyName: string): ESGScore {
+  void companyName; // deterministic placeholder until real data wiring
   const baseScore = faker.number.int({ min: 20, max: 95 });
   
   return {
@@ -97,11 +98,13 @@ export const mockData = {
 
   // Get historical ESG data
   getHistoricalData(ticker: string) {
+    void ticker;
     return generateHistoricalData();
   },
 
   // Get supply chain data
   getSupplyChainData(ticker: string) {
+    void ticker;
     return generateSupplyChainData();
   },
 

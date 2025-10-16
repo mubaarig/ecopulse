@@ -13,8 +13,26 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 
-const strategicHighlights = [
+type TrendTone = 'positive' | 'neutral' | 'negative';
+
+type StrategicHighlight = {
+  title: string;
+  value: string;
+  description: string;
+  delta: string;
+  icon: LucideIcon;
+  tone: TrendTone;
+};
+
+type ReductionItem = {
+  label: string;
+  value: string;
+  tone: TrendTone;
+};
+
+const strategicHighlights: StrategicHighlight[] = [
   {
     title: 'ESG Leaders (AA+)',
     value: '28',
@@ -80,7 +98,7 @@ const coreMetrics = [
   },
 ];
 
-const reductionBreakdown = [
+const reductionBreakdown: ReductionItem[] = [
   { label: 'Scope 1', value: '-8.4%', tone: 'positive' as const },
   { label: 'Scope 2', value: '-5.9%', tone: 'positive' as const },
   { label: 'Scope 3', value: '-1.7%', tone: 'neutral' as const },
