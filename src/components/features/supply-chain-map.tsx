@@ -3,11 +3,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { apiClient } from "@/lib/api/client";
 import { Globe, AlertTriangle } from "lucide-react";
-import { GlobeVisualization } from "./globe-visualization";
+// import { GlobeVisualization } from "./globe-visualization";
+import dynamic from 'next/dynamic';
 
 interface SupplyChainMapProps {
   ticker: string;
 }
+
+
+const GlobeVisualization = dynamic(() => import("./globe-visualization"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+        <p className="mt-2 text-sm text-gray-500">Loading 3D Visualization...</p>
+      </div>
+    </div>
+  ),
+});
 
 export function SupplyChainMap({ ticker }: SupplyChainMapProps) {
   const { data: supplyChainData, isLoading } = useQuery({
@@ -111,3 +125,5 @@ export function SupplyChainMap({ ticker }: SupplyChainMapProps) {
     </div>
   );
 }
+
+
