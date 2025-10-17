@@ -1,15 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  ArrowRight,
-  Building2,
-  Globe,
-  Loader2,
-  Search,
-  Sparkles,
-  TrendingUp,
-} from 'lucide-react';
+import { ArrowRight, Building2, Globe, Loader2, Search, Sparkles, TrendingUp } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
@@ -74,7 +66,7 @@ function getInitials(name: string) {
   return name
     .split(' ')
     .filter(Boolean)
-    .map(part => part[0]?.toUpperCase() ?? '')
+    .map((part) => part[0]?.toUpperCase() ?? '')
     .slice(0, 2)
     .join('');
 }
@@ -140,8 +132,8 @@ export function CompanySearch() {
 
   const filterOptions = useMemo(() => {
     const industries = new Set<string>();
-    SUGGESTED_COMPANIES.forEach(company => industries.add(company.industry));
-    companies.forEach(company => {
+    SUGGESTED_COMPANIES.forEach((company) => industries.add(company.industry));
+    companies.forEach((company) => {
       if (company.industry) {
         industries.add(company.industry);
       }
@@ -158,9 +150,7 @@ export function CompanySearch() {
   const filteredCompanies = useMemo(() => {
     const base = searchEnabled ? companies : SUGGESTED_COMPANIES;
     const candidates =
-      activeFilter === 'All'
-        ? base
-        : base.filter(company => company.industry === activeFilter);
+      activeFilter === 'All' ? base : base.filter((company) => company.industry === activeFilter);
     const limit = searchEnabled ? 6 : 4;
     return candidates.slice(0, limit);
   }, [companies, searchEnabled, activeFilter]);
@@ -209,7 +199,10 @@ export function CompanySearch() {
   }, [companies.length, debouncedQuery, dropdownResults.length, isFetching, trimmedQuery]);
 
   return (
-    <section aria-labelledby="company-search" className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+    <section
+      aria-labelledby="company-search"
+      className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm"
+    >
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
@@ -220,7 +213,8 @@ export function CompanySearch() {
             Company and supply chain intelligence search
           </h2>
           <p className="text-sm text-gray-600">
-            Surface ESG performance, disclosures, controversies, and risk signals across public companies in seconds.
+            Surface ESG performance, disclosures, controversies, and risk signals across public
+            companies in seconds.
           </p>
         </div>
 
@@ -232,12 +226,15 @@ export function CompanySearch() {
         </div>
       </header>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center"
+      >
         <div className="relative flex-1" ref={inputContainerRef}>
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <input
             value={query}
-            onChange={event => {
+            onChange={(event) => {
               setQuery(event.target.value);
               setIsDropdownOpen(true);
             }}
@@ -269,7 +266,7 @@ export function CompanySearch() {
                 </div>
               ) : dropdownResults.length > 0 ? (
                 <ul className="divide-y divide-gray-100">
-                  {dropdownResults.map(company => (
+                  {dropdownResults.map((company) => (
                     <li key={company.id}>
                       <button
                         type="button"
@@ -281,7 +278,9 @@ export function CompanySearch() {
                             {getInitials(company.name)}
                           </div>
                           <div className="min-w-0">
-                            <p className="truncate text-sm font-semibold text-gray-900">{company.name}</p>
+                            <p className="truncate text-sm font-semibold text-gray-900">
+                              {company.name}
+                            </p>
                             <p className="truncate text-xs text-gray-500">
                               {company.ticker} &bull; {company.industry || '—'}
                             </p>
@@ -325,7 +324,7 @@ export function CompanySearch() {
       )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
-        {filterOptions.map(option => {
+        {filterOptions.map((option) => {
           const isActive = option === activeFilter;
           return (
             <button
@@ -347,7 +346,9 @@ export function CompanySearch() {
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">Suggested matches</h3>
+            <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
+              Suggested matches
+            </h3>
             <span className="text-xs font-medium text-gray-500">
               {searchEnabled && isFetching
                 ? 'Searching...'
@@ -355,7 +356,7 @@ export function CompanySearch() {
             </span>
           </div>
           <ul className="space-y-3">
-            {filteredCompanies.map(company => (
+            {filteredCompanies.map((company) => (
               <li
                 key={company.id}
                 className="flex items-center justify-between rounded-2xl border border-gray-100 bg-gray-50/70 p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-emerald-200 hover:bg-white"
@@ -405,11 +406,13 @@ export function CompanySearch() {
               <Globe className="h-10 w-10 rounded-full bg-emerald-50 p-2 text-emerald-600" />
               <div>
                 <h3 className="text-base font-semibold text-gray-900">Trending themes</h3>
-                <p className="text-sm text-gray-600">Jump into what other analysts are exploring this week.</p>
+                <p className="text-sm text-gray-600">
+                  Jump into what other analysts are exploring this week.
+                </p>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              {TRENDING_IDEAS.map(idea => (
+              {TRENDING_IDEAS.map((idea) => (
                 <button
                   key={idea}
                   type="button"
@@ -431,11 +434,13 @@ export function CompanySearch() {
               <Building2 className="h-10 w-10 rounded-full bg-gray-100 p-2 text-gray-600" />
               <div>
                 <h3 className="text-base font-semibold text-gray-900">Watchlist pipelines</h3>
-                <p className="text-sm text-gray-600">Load saved cohorts to monitor progress and engagement outcomes.</p>
+                <p className="text-sm text-gray-600">
+                  Load saved cohorts to monitor progress and engagement outcomes.
+                </p>
               </div>
             </div>
             <div className="mt-4 space-y-3 text-sm">
-              {WATCHLIST_PIPELINES.map(pipeline => (
+              {WATCHLIST_PIPELINES.map((pipeline) => (
                 <button
                   key={pipeline}
                   type="button"

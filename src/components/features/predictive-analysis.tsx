@@ -18,11 +18,11 @@ export function PredictiveAnalysis({ ticker }: PredictiveAnalysisProps) {
   const calculatePrediction = () => {
     if (!historicalData || historicalData.length < 6) return null;
 
-    const recentScores = historicalData.slice(-6).map(d => d.score);
+    const recentScores = historicalData.slice(-6).map((d) => d.score);
     const trend = recentScores[recentScores.length - 1] - recentScores[0];
     const avgScore = recentScores.reduce((a, b) => a + b, 0) / recentScores.length;
-    
-    const nextQuarterPrediction = avgScore + (trend * 0.3); // Dampened trend
+
+    const nextQuarterPrediction = avgScore + trend * 0.3; // Dampened trend
     const confidence = Math.max(60, 95 - Math.abs(trend) * 2); // Higher confidence for stable trends
 
     return {
@@ -33,7 +33,7 @@ export function PredictiveAnalysis({ ticker }: PredictiveAnalysisProps) {
         trend < -5 ? 'Accelerating decline in governance scores' : null,
         recentScores[recentScores.length - 1] < 40 ? 'Critical low score territory' : null,
         Math.abs(trend) > 10 ? 'High volatility in recent performance' : null,
-      ].filter(Boolean) as string[]
+      ].filter(Boolean) as string[],
     };
   };
 
@@ -75,7 +75,7 @@ export function PredictiveAnalysis({ ticker }: PredictiveAnalysisProps) {
             <span className="font-medium text-gray-900">{prediction.confidence}%</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className="bg-blue-600 h-2 rounded-full transition-all duration-500"
               style={{ width: `${prediction.confidence}%` }}
             ></div>

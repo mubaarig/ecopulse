@@ -1,6 +1,15 @@
 'use client';
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from 'recharts';
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
 
@@ -26,10 +35,11 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
   }
 
   // Format data for Recharts
-  const chartData = historicalData?.map(item => ({
-    ...item,
-    date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' })
-  })) || [];
+  const chartData =
+    historicalData?.map((item) => ({
+      ...item,
+      date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
+    })) || [];
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -59,55 +69,47 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis 
-              dataKey="date" 
-              stroke="#6b7280"
-              fontSize={12}
-            />
-            <YAxis 
-              stroke="#6b7280"
-              fontSize={12}
-              domain={[0, 100]}
-            />
-            <Tooltip 
-              contentStyle={{ 
-                backgroundColor: 'white', 
+            <XAxis dataKey="date" stroke="#6b7280" fontSize={12} />
+            <YAxis stroke="#6b7280" fontSize={12} domain={[0, 100]} />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: 'white',
                 border: '1px solid #e5e7eb',
                 borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
               }}
             />
             <Legend />
-            <Line 
-              type="monotone" 
-              dataKey="score" 
-              stroke="#3b82f6" 
+            <Line
+              type="monotone"
+              dataKey="score"
+              stroke="#3b82f6"
               strokeWidth={2}
               dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
               name="Overall Score"
             />
-            <Line 
-              type="monotone" 
-              dataKey="environmental" 
-              stroke="#10b981" 
+            <Line
+              type="monotone"
+              dataKey="environmental"
+              stroke="#10b981"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#10b981', strokeWidth: 2, r: 3 }}
               name="Environmental"
             />
-            <Line 
-              type="monotone" 
-              dataKey="social" 
-              stroke="#8b5cf6" 
+            <Line
+              type="monotone"
+              dataKey="social"
+              stroke="#8b5cf6"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 3 }}
               name="Social"
             />
-            <Line 
-              type="monotone" 
-              dataKey="governance" 
-              stroke="#f59e0b" 
+            <Line
+              type="monotone"
+              dataKey="governance"
+              stroke="#f59e0b"
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#f59e0b', strokeWidth: 2, r: 3 }}

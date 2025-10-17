@@ -134,7 +134,8 @@ export function StatsGrid() {
             Integrated sustainability overview
           </h2>
           <p className="text-sm text-gray-600">
-            Synthesizes headline momentum with underlying ESG performance and stewardship priorities.
+            Synthesizes headline momentum with underlying ESG performance and stewardship
+            priorities.
           </p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-700">
@@ -204,7 +205,9 @@ export function StatsGrid() {
                       <span className="rounded-lg bg-emerald-50 p-2 text-emerald-600">
                         <Icon className="h-5 w-5" />
                       </span>
-                      <span className={`rounded-full px-2 py-1 text-xs font-semibold ${badgeClass}`}>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-semibold ${badgeClass}`}
+                      >
                         {change}
                       </span>
                     </div>
@@ -225,9 +228,12 @@ export function StatsGrid() {
             <div className="flex items-center gap-3">
               <Gauge className="h-10 w-10 rounded-full bg-emerald-50 p-2 text-emerald-600" />
               <div>
-                <h3 className="text-base font-semibold text-gray-900">Emissions reduction velocity</h3>
+                <h3 className="text-base font-semibold text-gray-900">
+                  Emissions reduction velocity
+                </h3>
                 <p className="text-sm text-gray-600">
-                  Twelve-month deltas across reported scopes benchmarked against science-based targets.
+                  Twelve-month deltas across reported scopes benchmarked against science-based
+                  targets.
                 </p>
               </div>
             </div>
@@ -252,7 +258,8 @@ export function StatsGrid() {
               })}
             </ul>
             <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-xs text-emerald-800">
-              Accelerated Scope 1 and Scope 2 progress keeps the portfolio ahead of the 2027 reduction glide path.
+              Accelerated Scope 1 and Scope 2 progress keeps the portfolio ahead of the 2027
+              reduction glide path.
             </div>
           </article>
 

@@ -25,18 +25,11 @@ export function DashboardHeader() {
             </button>
           )}
           <div className="flex items-center space-x-2 mt-2">
-            <Image
-              src="/ecopulse.png"
-              alt="EcoPulse logo"
-              width={100}
-              height={50}
-              priority
-            />
-            <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            </span>
+            <Image src="/ecopulse.png" alt="EcoPulse logo" width={100} height={50} priority />
+            <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent"></span>
           </div>
         </div>
-        
+
         {/* Search Bar - Only show on dashboard */}
         {!isCompanyPage && (
           <div className="flex flex-1 items-center justify-center px-8">
@@ -45,9 +38,7 @@ export function DashboardHeader() {
         )}
 
         <nav className="flex items-center space-x-6 text-sm font-medium">
-          <button className="text-gray-600 hover:text-gray-900 transition-colors">
-            Dashboard
-          </button>
+          <button className="text-gray-600 hover:text-gray-900 transition-colors">Dashboard</button>
           <button className="text-gray-600 hover:text-gray-900 transition-colors">
             Methodology
           </button>

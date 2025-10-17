@@ -20,7 +20,7 @@ export function LazyLoad({ children, rootMargin = '100px', height = 200 }: LazyL
           observer.disconnect();
         }
       },
-      { rootMargin }
+      { rootMargin },
     );
 
     if (ref.current) {
@@ -32,7 +32,9 @@ export function LazyLoad({ children, rootMargin = '100px', height = 200 }: LazyL
 
   return (
     <div ref={ref} style={{ minHeight: height }}>
-      {isVisible ? children : (
+      {isVisible ? (
+        children
+      ) : (
         <div className="flex items-center justify-center h-full">
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
         </div>

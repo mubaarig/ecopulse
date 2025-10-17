@@ -27,7 +27,8 @@ export function SupplyChainMap({ ticker }: SupplyChainMapProps) {
   }
 
   const totalEmissions = supplyChainData?.reduce((sum, item) => sum + item.emission, 0) || 0;
-  const highRiskCountries = supplyChainData?.filter(item => item.riskLevel === 'high').length || 0;
+  const highRiskCountries =
+    supplyChainData?.filter((item) => item.riskLevel === 'high').length || 0;
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
@@ -74,17 +75,26 @@ export function SupplyChainMap({ ticker }: SupplyChainMapProps) {
         {/* Country List */}
         <div className="space-y-2 max-h-32 overflow-y-auto custom-scrollbar">
           {supplyChainData?.map((country, index) => (
-            <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+            <div
+              key={index}
+              className="flex items-center justify-between p-2 bg-gray-50 rounded-lg"
+            >
               <div className="flex items-center space-x-3">
-                <div className={`w-3 h-3 rounded-full ${
-                  country.riskLevel === 'high' ? 'bg-red-500' :
-                  country.riskLevel === 'medium' ? 'bg-yellow-500' :
-                  'bg-green-500'
-                }`}></div>
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    country.riskLevel === 'high'
+                      ? 'bg-red-500'
+                      : country.riskLevel === 'medium'
+                        ? 'bg-yellow-500'
+                        : 'bg-green-500'
+                  }`}
+                ></div>
                 <span className="text-sm font-medium text-gray-900">{country.country}</span>
               </div>
               <div className="text-right">
-                <div className="text-sm text-gray-900">{Math.round(country.emission / 1000)}K tons</div>
+                <div className="text-sm text-gray-900">
+                  {Math.round(country.emission / 1000)}K tons
+                </div>
                 <div className="text-xs text-gray-500">{country.facilities} facilities</div>
               </div>
             </div>

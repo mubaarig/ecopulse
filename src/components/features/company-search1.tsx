@@ -23,7 +23,11 @@ export function CompanySearch() {
     return () => clearTimeout(timer);
   }, [query]);
 
-  const { data: companies = [], isLoading, error } = useQuery({
+  const {
+    data: companies = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ['company-search', debouncedQuery],
     queryFn: () => apiClient.searchCompanies(debouncedQuery),
     enabled: debouncedQuery.length > 0,
@@ -56,7 +60,7 @@ export function CompanySearch() {
           onFocus={() => setIsOpen(true)}
           className="w-full h-14 pl-10 pr-4 text-lg rounded-xl border border-gray-200 bg-white shadow-lg focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all"
         />
-        
+
         {/* Search hint */}
         {query.length === 0 && (
           <div className="absolute right-3 top-1/2 -translate-y-1/2">
@@ -97,9 +101,7 @@ export function CompanySearch() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 truncate">
-                      {company.industry}
-                    </p>
+                    <p className="text-sm text-gray-600 truncate">{company.industry}</p>
                   </div>
                   <ExternalLink className="h-4 w-4 text-gray-400 group-hover:text-blue-600 transition-colors" />
                 </button>
@@ -118,12 +120,7 @@ export function CompanySearch() {
       )}
 
       {/* Click outside to close */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40"
-          onClick={() => setIsOpen(false)}
-        />
-      )}
+      {isOpen && <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />}
     </div>
   );
 }

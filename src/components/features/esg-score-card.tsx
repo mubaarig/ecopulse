@@ -36,7 +36,7 @@ export function ESGScoreCard({ score }: ESGScoreCardProps) {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <h2 className="text-lg font-semibold text-gray-900 mb-4">ESG Score</h2>
-      
+
       <div className="space-y-4">
         {/* Main Score */}
         <div className={`text-center p-6 rounded-lg border-2 ${getScoreBg(score.total)}`}>
