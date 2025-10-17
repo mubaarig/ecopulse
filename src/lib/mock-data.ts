@@ -14,7 +14,7 @@ const COMPANY_DATA = [
 ];
 
 // Generate realistic ESG scores with trends
-function generateESGScore(companyName: string): ESGScore {
+export function generateMockESGScore(companyName: string): ESGScore {
   void companyName; // deterministic placeholder until real data wiring
   const baseScore = faker.number.int({ min: 20, max: 95 });
   
@@ -89,7 +89,7 @@ export const mockData = {
       ticker: company.ticker,
       industry: company.industry,
       logoUrl: `https://logo.clearbit.com/${company.name.split(' ')[0].toLowerCase()}.com`,
-      esgScore: generateESGScore(company.name),
+      esgScore: generateMockESGScore(company.name),
       description: faker.company.catchPhrase(),
       marketCap: faker.number.int({ min: 1000000000, max: 3000000000000 }),
       headquarters: `${faker.location.city()}, ${faker.location.country()}`,
