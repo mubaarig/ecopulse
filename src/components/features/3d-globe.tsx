@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 import * as THREE from 'three';
@@ -43,10 +43,9 @@ function GlobePoints({ data }: { data: GlobeProps['supplyChainData'] }) {
     }
   });
 
-  const { positions, colors, sizes } = useMemo(() => {
+  const { positions, colors } = useMemo(() => {
     const positions = new Float32Array(data.length * 3);
     const colors = new Float32Array(data.length * 3);
-    const sizes = new Float32Array(data.length);
 
     data.forEach((item, i) => {
       const coords = COUNTRY_COORDINATES[item.country];
@@ -68,33 +67,28 @@ function GlobePoints({ data }: { data: GlobeProps['supplyChainData'] }) {
         colors[i * 3] = color.r;
         colors[i * 3 + 1] = color.g;
         colors[i * 3 + 2] = color.b;
-
-        // Size based on emission (normalized)
-        sizes[i] = Math.min(0.3 + (item.emission / 50000) * 0.7, 1.0);
       }
     });
 
-    return { positions, colors, sizes };
+    return { positions, colors };
   }, [data]);
 
+  const geometry = useMemo(() => {
+    const bufferGeometry = new THREE.BufferGeometry();
+    bufferGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    bufferGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+    return bufferGeometry;
+  }, [positions, colors]);
+
+  useEffect(() => {
+    return () => {
+      geometry.dispose();
+    };
+  }, [geometry]);
+
   return (
-    <points ref={pointsRef}>
-      <bufferGeometry>
-        <bufferAttribute
-          attach="attributes-position"
-          count={positions.length / 3}
-          array={positions}
-          itemSize={3}
-        />
-        <bufferAttribute
-          attach="attributes-color"
-          count={colors.length / 3}
-          array={colors}
-          itemSize={3}
-        />
-        <bufferAttribute attach="attributes-size" count={sizes.length} array={sizes} itemSize={1} />
-      </bufferGeometry>
-      <pointsMaterial size={0.2} vertexColors transparent opacity={0.8} sizeAttenuation />
+    <points ref={pointsRef} geometry={geometry}>
+      <pointsMaterial size={0.3} vertexColors transparent opacity={0.85} sizeAttenuation />
     </points>
   );
 }
