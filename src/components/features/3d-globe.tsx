@@ -17,12 +17,12 @@ interface GlobeProps {
 // Country coordinates (simplified)
 const COUNTRY_COORDINATES: { [key: string]: [number, number] } = {
   'United States': [39.8283, -98.5795],
-  'China': [35.8617, 104.1954],
-  'Vietnam': [14.0583, 108.2772],
-  'Mexico': [23.6345, -102.5528],
-  'Germany': [51.1657, 10.4515],
-  'India': [20.5937, 78.9629],
-  'Brazil': [-14.2350, -51.9253],
+  China: [35.8617, 104.1954],
+  Vietnam: [14.0583, 108.2772],
+  Mexico: [23.6345, -102.5528],
+  Germany: [51.1657, 10.4515],
+  India: [20.5937, 78.9629],
+  Brazil: [-14.235, -51.9253],
 };
 
 function latLongToVector3(lat: number, lon: number, radius: number) {
@@ -59,8 +59,11 @@ function GlobePoints({ data }: { data: GlobeProps['supplyChainData'] }) {
 
         // Color based on risk level
         const color = new THREE.Color(
-          item.riskLevel === 'high' ? '#ef4444' :
-          item.riskLevel === 'medium' ? '#f59e0b' : '#10b981'
+          item.riskLevel === 'high'
+            ? '#ef4444'
+            : item.riskLevel === 'medium'
+              ? '#f59e0b'
+              : '#10b981',
         );
         colors[i * 3] = color.r;
         colors[i * 3 + 1] = color.g;
@@ -89,20 +92,9 @@ function GlobePoints({ data }: { data: GlobeProps['supplyChainData'] }) {
           array={colors}
           itemSize={3}
         />
-        <bufferAttribute
-          attach="attributes-size"
-          count={sizes.length}
-          array={sizes}
-          itemSize={1}
-        />
+        <bufferAttribute attach="attributes-size" count={sizes.length} array={sizes} itemSize={1} />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.2}
-        vertexColors
-        transparent
-        opacity={0.8}
-        sizeAttenuation
-      />
+      <pointsMaterial size={0.2} vertexColors transparent opacity={0.8} sizeAttenuation />
     </points>
   );
 }
@@ -128,23 +120,15 @@ export function ThreeGlobe({ supplyChainData }: GlobeProps) {
       </div>
 
       <div className="h-full w-full">
-        <Canvas
-          camera={{ position: [0, 0, 12], fov: 50 }}
-          gl={{ antialias: true }}
-        >
+        <Canvas camera={{ position: [0, 0, 12], fov: 50 }} gl={{ antialias: true }}>
           <color attach="background" args={['#111827']} />
           <ambientLight intensity={0.3} />
           <pointLight position={[10, 10, 10]} intensity={1} />
-          
+
           {/* Globe */}
           <mesh>
             <sphereGeometry args={[5, 32, 32]} />
-            <meshPhongMaterial
-              color="#1e40af"
-              transparent
-              opacity={0.6}
-              shininess={100}
-            />
+            <meshPhongMaterial color="#1e40af" transparent opacity={0.6} shininess={100} />
           </mesh>
 
           {/* Supply Chain Points */}
@@ -170,6 +154,6 @@ export function ThreeGlobe({ supplyChainData }: GlobeProps) {
 
 // Canvas component for client-side only rendering
 import dynamic from 'next/dynamic';
-const Canvas = dynamic(() => import('@react-three/fiber').then(mod => mod.Canvas), {
+const Canvas = dynamic(() => import('@react-three/fiber').then((mod) => mod.Canvas), {
   ssr: false,
 });

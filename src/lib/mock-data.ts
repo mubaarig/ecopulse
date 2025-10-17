@@ -17,7 +17,7 @@ const COMPANY_DATA = [
 export function generateMockESGScore(companyName: string): ESGScore {
   void companyName; // deterministic placeholder until real data wiring
   const baseScore = faker.number.int({ min: 20, max: 95 });
-  
+
   return {
     total: baseScore,
     environmental: faker.number.int({ min: 15, max: 90 }),
@@ -32,15 +32,15 @@ export function generateMockESGScore(companyName: string): ESGScore {
 function generateHistoricalData(months: number = 12) {
   const data = [];
   let currentScore = faker.number.int({ min: 40, max: 80 });
-  
+
   for (let i = months; i >= 0; i--) {
     const date = new Date();
     date.setMonth(date.getMonth() - i);
-    
+
     // Simulate realistic score fluctuations
     currentScore += faker.number.int({ min: -5, max: 5 });
     currentScore = Math.max(20, Math.min(95, currentScore)); // Keep within bounds
-    
+
     data.push({
       date: date.toISOString().split('T')[0],
       score: currentScore,
@@ -49,15 +49,15 @@ function generateHistoricalData(months: number = 12) {
       governance: Math.max(10, currentScore + faker.number.int({ min: -15, max: 15 })),
     });
   }
-  
+
   return data;
 }
 
 // Generate supply chain data
 function generateSupplyChainData() {
   const countries = ['United States', 'China', 'Vietnam', 'Mexico', 'Germany', 'India', 'Brazil'];
-  
-  return countries.map(country => ({
+
+  return countries.map((country) => ({
     country,
     emission: faker.number.int({ min: 1000, max: 50000 }),
     riskLevel: faker.helpers.arrayElement(['low', 'medium', 'high']),
@@ -69,7 +69,7 @@ function generateSupplyChainData() {
 export const mockData = {
   // Get all companies for search
   getCompanies(): Company[] {
-    return COMPANY_DATA.map(company => ({
+    return COMPANY_DATA.map((company) => ({
       id: faker.string.uuid(),
       name: company.name,
       ticker: company.ticker,
@@ -80,7 +80,7 @@ export const mockData = {
 
   // Get detailed company data
   getCompanyDetails(ticker: string): CompanyDetails | null {
-    const company = COMPANY_DATA.find(c => c.ticker === ticker);
+    const company = COMPANY_DATA.find((c) => c.ticker === ticker);
     if (!company) return null;
 
     return {
@@ -112,11 +112,12 @@ export const mockData = {
   searchCompanies(query: string): Company[] {
     const companies = this.getCompanies();
     const lowerQuery = query.toLowerCase();
-    
-    return companies.filter(company => 
-      company.name.toLowerCase().includes(lowerQuery) ||
-      company.ticker.toLowerCase().includes(lowerQuery) ||
-      company.industry.toLowerCase().includes(lowerQuery)
+
+    return companies.filter(
+      (company) =>
+        company.name.toLowerCase().includes(lowerQuery) ||
+        company.ticker.toLowerCase().includes(lowerQuery) ||
+        company.industry.toLowerCase().includes(lowerQuery),
     );
   },
 };

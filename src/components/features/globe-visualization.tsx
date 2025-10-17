@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRef, useEffect, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Sphere, Stars } from "@react-three/drei";
-import * as THREE from "three";
+import { useRef, useEffect, useState } from 'react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Sphere, Stars } from '@react-three/drei';
+import * as THREE from 'three';
 
 interface GlobeVisualizationProps {
   supplyChainData: Array<{
@@ -19,7 +19,7 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
 
   const getCountryCoordinates = (country: string) => {
     const coordinates: Record<string, [number, number]> = {
-      "United States": [40.0, -100.0],
+      'United States': [40.0, -100.0],
       China: [35.0, 105.0],
       Vietnam: [16.0, 106.0],
       Mexico: [23.0, -102.0],
@@ -53,12 +53,7 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
       <pointLight position={[10, 10, 10]} intensity={1.5} />
 
       <Sphere ref={globeRef} args={[5, 32, 32]}>
-        <meshPhongMaterial
-          color="#1e3a8a"
-          transparent
-          opacity={0.6}
-          side={THREE.DoubleSide}
-        />
+        <meshPhongMaterial color="#1e3a8a" transparent opacity={0.6} side={THREE.DoubleSide} />
       </Sphere>
 
       <group>
@@ -66,17 +61,14 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
           const [lat, lon] = getCountryCoordinates(country.country);
           const position = latLongToVector3(lat, lon, 5.1);
           const riskColor =
-            country.riskLevel === "high"
-              ? "#ef4444"
-              : country.riskLevel === "medium"
-              ? "#f59e0b"
-              : "#10b981";
+            country.riskLevel === 'high'
+              ? '#ef4444'
+              : country.riskLevel === 'medium'
+                ? '#f59e0b'
+                : '#10b981';
 
           return (
-            <mesh
-              key={`${country.country}-${index}`}
-              position={position}
-            >
+            <mesh key={`${country.country}-${index}`} position={position}>
               <sphereGeometry args={[0.1, 8, 8]} />
               <meshBasicMaterial color={riskColor} />
             </mesh>
@@ -87,9 +79,7 @@ function Globe({ supplyChainData }: GlobeVisualizationProps) {
   );
 }
 
-export function GlobeVisualization({
-  supplyChainData,
-}: GlobeVisualizationProps) {
+export function GlobeVisualization({ supplyChainData }: GlobeVisualizationProps) {
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -101,9 +91,7 @@ export function GlobeVisualization({
       <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto" />
-          <p className="mt-2 text-sm text-gray-500">
-            Loading 3D Visualization...
-          </p>
+          <p className="mt-2 text-sm text-gray-500">Loading 3D Visualization...</p>
         </div>
       </div>
     );

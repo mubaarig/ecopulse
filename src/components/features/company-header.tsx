@@ -27,7 +27,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
           <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-green-100 rounded-xl flex items-center justify-center">
             <Building2 className="h-8 w-8 text-blue-600" />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center space-x-3">
               <h1 className="text-2xl font-bold text-gray-900">{company.name}</h1>
@@ -35,9 +35,9 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
                 {company.ticker}
               </span>
             </div>
-            
+
             <p className="text-gray-600">{company.description}</p>
-            
+
             <div className="flex items-center space-x-4 text-sm text-gray-500">
               {company.headquarters && (
                 <div className="flex items-center space-x-1">
@@ -61,13 +61,20 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
         {/* ESG Trend Indicator */}
         <div className="flex items-center space-x-2 bg-gray-50 rounded-lg px-3 py-2">
           {getTrendIcon(company.esgScore.trend)}
-          <span className={`text-sm font-medium ${
-            company.esgScore.trend === 'up' ? 'text-green-700' :
-            company.esgScore.trend === 'down' ? 'text-red-700' :
-            'text-gray-700'
-          }`}>
-            {company.esgScore.trend === 'up' ? 'Improving' :
-             company.esgScore.trend === 'down' ? 'Declining' : 'Stable'}
+          <span
+            className={`text-sm font-medium ${
+              company.esgScore.trend === 'up'
+                ? 'text-green-700'
+                : company.esgScore.trend === 'down'
+                  ? 'text-red-700'
+                  : 'text-gray-700'
+            }`}
+          >
+            {company.esgScore.trend === 'up'
+              ? 'Improving'
+              : company.esgScore.trend === 'down'
+                ? 'Declining'
+                : 'Stable'}
           </span>
         </div>
       </div>

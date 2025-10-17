@@ -1,12 +1,4 @@
-import {
-  AlertTriangle,
-  Clock,
-  Compass,
-  History,
-  Sparkles,
-  Target,
-  Users,
-} from 'lucide-react';
+import { AlertTriangle, Clock, Compass, History, Sparkles, Target, Users } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 
@@ -102,7 +94,10 @@ const toneStyles: Record<
 
 export function RecentSearches2() {
   return (
-    <section aria-labelledby="recent-searches" className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
+    <section
+      aria-labelledby="recent-searches"
+      className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm"
+    >
       <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-gray-600">
@@ -113,64 +108,73 @@ export function RecentSearches2() {
             Latest searches from your workspace
           </h2>
           <p className="text-sm text-gray-600">
-            Revisit the most recent ESG intelligence queries, discover insights surfaced by teammates, and fast-track
-            collaboration.
+            Revisit the most recent ESG intelligence queries, discover insights surfaced by
+            teammates, and fast-track collaboration.
           </p>
         </div>
-        <Button variant="outline" className="border-gray-200 text-sm font-semibold text-gray-700 hover:border-emerald-200">
+        <Button
+          variant="outline"
+          className="border-gray-200 text-sm font-semibold text-gray-700 hover:border-emerald-200"
+        >
           View full history
         </Button>
       </header>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="space-y-4">
-          {recentSearches.map(({ id, query, timestamp, analyst, tags, results, icon: Icon, tone, insight }) => {
-            const toneStyle = toneStyles[tone];
+          {recentSearches.map(
+            ({ id, query, timestamp, analyst, tags, results, icon: Icon, tone, insight }) => {
+              const toneStyle = toneStyles[tone];
 
-            return (
-              <article
-                key={id}
-                className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50/80 p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:bg-white"
-              >
-                <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gray-100/60 blur-2xl group-hover:bg-emerald-100/60" />
-                <div className="relative flex items-start justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <span className={`${toneStyle.background} flex h-12 w-12 items-center justify-center rounded-full`}>
-                      <Icon className={`${toneStyle.text} h-5 w-5`} />
-                    </span>
-                    <div>
-                      <h3 className="text-base font-semibold text-gray-900">{query}</h3>
-                      <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3.5 w-3.5" />
-                          {timestamp}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Users className="h-3.5 w-3.5" />
-                          {analyst}
-                        </span>
-                        <span>{results}</span>
+              return (
+                <article
+                  key={id}
+                  className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-gray-50/80 p-6 shadow-sm transition hover:-translate-y-1 hover:border-emerald-200 hover:bg-white"
+                >
+                  <div className="absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gray-100/60 blur-2xl group-hover:bg-emerald-100/60" />
+                  <div className="relative flex items-start justify-between gap-4">
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={`${toneStyle.background} flex h-12 w-12 items-center justify-center rounded-full`}
+                      >
+                        <Icon className={`${toneStyle.text} h-5 w-5`} />
+                      </span>
+                      <div>
+                        <h3 className="text-base font-semibold text-gray-900">{query}</h3>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-gray-500">
+                          <span className="flex items-center gap-1">
+                            <Clock className="h-3.5 w-3.5" />
+                            {timestamp}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Users className="h-3.5 w-3.5" />
+                            {analyst}
+                          </span>
+                          <span>{results}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <span className={`rounded-full px-3 py-1 text-xs font-semibold ${toneStyle.background} ${toneStyle.text}`}>
-                    {toneStyle.label}
-                  </span>
-                </div>
-                <p className="relative mt-4 text-sm text-gray-600">{insight}</p>
-                <div className="relative mt-4 flex flex-wrap gap-2">
-                  {tags.map((tag) => (
                     <span
-                      key={tag}
-                      className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 shadow-sm"
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${toneStyle.background} ${toneStyle.text}`}
                     >
-                      {tag}
+                      {toneStyle.label}
                     </span>
-                  ))}
-                </div>
-              </article>
-            );
-          })}
+                  </div>
+                  <p className="relative mt-4 text-sm text-gray-600">{insight}</p>
+                  <div className="relative mt-4 flex flex-wrap gap-2">
+                    {tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full border border-gray-200 bg-white px-3 py-1 text-xs font-medium text-gray-600 shadow-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              );
+            },
+          )}
         </div>
 
         <aside className="space-y-6">
@@ -179,7 +183,9 @@ export function RecentSearches2() {
               <Sparkles className="h-10 w-10 rounded-full bg-emerald-50 p-2 text-emerald-600" />
               <div>
                 <h3 className="text-base font-semibold text-gray-900">Saved prompts</h3>
-                <p className="text-sm text-gray-600">Launch proven natural language recipes curated by your team.</p>
+                <p className="text-sm text-gray-600">
+                  Launch proven natural language recipes curated by your team.
+                </p>
               </div>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
@@ -192,7 +198,10 @@ export function RecentSearches2() {
                     <p className="font-medium text-gray-800">{label}</p>
                     <p className="text-xs text-gray-500">{updated}</p>
                   </div>
-                  <Button variant="ghost" className="h-auto p-0 text-sm font-semibold text-emerald-600 hover:text-emerald-700">
+                  <Button
+                    variant="ghost"
+                    className="h-auto p-0 text-sm font-semibold text-emerald-600 hover:text-emerald-700"
+                  >
                     Run
                   </Button>
                 </li>
@@ -205,12 +214,17 @@ export function RecentSearches2() {
               <Users className="h-10 w-10 rounded-full bg-gray-100 p-2 text-gray-600" />
               <div>
                 <h3 className="text-base font-semibold text-gray-900">Collaboration queue</h3>
-                <p className="text-sm text-gray-600">Requests and updates from aligned teams flowing through EcoPulse.</p>
+                <p className="text-sm text-gray-600">
+                  Requests and updates from aligned teams flowing through EcoPulse.
+                </p>
               </div>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
               {collaborationUpdates.map(({ team, message, time }) => (
-                <li key={team + time} className="space-y-1 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                <li
+                  key={team + time}
+                  className="space-y-1 rounded-xl border border-gray-100 bg-gray-50 px-4 py-3"
+                >
                   <div className="flex items-center justify-between">
                     <p className="font-semibold text-gray-800">{team} team</p>
                     <span className="text-xs text-gray-500">{time}</span>

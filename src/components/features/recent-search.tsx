@@ -14,10 +14,8 @@ const recentSnapshots = [
 export function RecentSearches() {
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">
-        Recently Analyzed Companies
-      </h2>
-      
+      <h2 className="text-lg font-semibold text-gray-900 mb-4">Recently Analyzed Companies</h2>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {recentCompanies.map((company, index) => {
           const snapshot = recentSnapshots[index] ?? recentSnapshots[recentSnapshots.length - 1];
@@ -36,21 +34,21 @@ export function RecentSearches() {
                   <h3 className="font-medium text-gray-900 group-hover:text-blue-600 transition-colors">
                     {company.name}
                   </h3>
-                  <p className="text-sm text-gray-600">
-                    {company.industry}
-                  </p>
+                  <p className="text-sm text-gray-600">{company.industry}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-2">
-                <span className="font-semibold text-gray-900">
-                  {score}
-                </span>
-                <div className={`p-1 rounded ${
-                  trend === 'up' ? 'bg-green-100 text-green-600' :
-                  trend === 'down' ? 'bg-red-100 text-red-600' :
-                  'bg-gray-100 text-gray-600'
-                }`}>
+                <span className="font-semibold text-gray-900">{score}</span>
+                <div
+                  className={`p-1 rounded ${
+                    trend === 'up'
+                      ? 'bg-green-100 text-green-600'
+                      : trend === 'down'
+                        ? 'bg-red-100 text-red-600'
+                        : 'bg-gray-100 text-gray-600'
+                  }`}
+                >
                   {trend === 'up' && <ArrowUp className="h-3 w-3" />}
                   {trend === 'down' && <ArrowDown className="h-3 w-3" />}
                   {trend === 'stable' && <Minus className="h-3 w-3" />}

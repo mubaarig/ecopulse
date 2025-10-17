@@ -17,7 +17,7 @@ export function CompanyDashboard({ company }: CompanyDashboardProps) {
     <div className="space-y-6">
       {/* Company Header */}
       <CompanyHeader company={company} />
-      
+
       {/* Main Dashboard Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - Scores & Breakdown */}
