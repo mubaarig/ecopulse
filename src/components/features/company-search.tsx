@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ArrowRight,
   Building2,
@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { apiClient } from '@/lib/api/client';
@@ -80,18 +81,62 @@ function getInitials(name: string) {
 
 export function CompanySearch() {
   const [query, setQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('All');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
   const trimmedQuery = query.trim();
-  const searchEnabled = trimmedQuery.length > 0;
+  const searchEnabled = debouncedQuery.length > 0;
 
   const router = useRouter();
+  const inputContainerRef = useRef<HTMLDivElement>(null);
 
-  const { data: companies = [], isFetching } = useQuery<Company[]>({
-    queryKey: ['company-search', trimmedQuery],
-    queryFn: () => apiClient.searchCompanies(trimmedQuery),
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setDebouncedQuery(trimmedQuery);
+    }, 300);
+
+    return () => window.clearTimeout(timer);
+  }, [trimmedQuery]);
+
+  useEffect(() => {
+    if (!trimmedQuery) {
+      setIsDropdownOpen(false);
+    }
+  }, [trimmedQuery]);
+
+  useEffect(() => {
+    if (!isDropdownOpen) {
+      return;
+    }
+
+    const handleOutsideClick = (event: MouseEvent) => {
+      if (inputContainerRef.current && !inputContainerRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, [isDropdownOpen]);
+
+  const {
+    data: companies = [],
+    isFetching,
+    isLoading,
+    error,
+  } = useQuery<Company[], Error>({
+    queryKey: ['company-search', debouncedQuery],
+    queryFn: () => apiClient.searchCompanies(debouncedQuery),
     enabled: searchEnabled,
     staleTime: 5 * 60 * 1000,
   });
+
+  useEffect(() => {
+    if (error) {
+      toast.error('Failed to search companies. Please try again.');
+    }
+  }, [error]);
 
   const filterOptions = useMemo(() => {
     const industries = new Set<string>();
@@ -120,26 +165,48 @@ export function CompanySearch() {
     return candidates.slice(0, limit);
   }, [companies, searchEnabled, activeFilter]);
 
+  const dropdownResults = useMemo(() => companies.slice(0, 6), [companies]);
+
   const isEmptyState = searchEnabled && !isFetching && filteredCompanies.length === 0;
 
   const handleSelectCompany = (company: Company) => {
     if (!company || !company.ticker || company.ticker === 'Private') {
+      toast.error('This company profile is unavailable right now.');
       return;
     }
+
     setQuery('');
+    setDebouncedQuery('');
     setActiveFilter('All');
+    setIsDropdownOpen(false);
     router.push(`/company/${company.ticker}`);
+    toast.success(`Loading ${company.name} profile...`);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!trimmedQuery) {
+    if (!debouncedQuery) {
       return;
     }
     if (companies.length > 0) {
       handleSelectCompany(companies[0]);
     }
+    setIsDropdownOpen(false);
   };
+
+  const feedbackMessage = useMemo(() => {
+    if (!trimmedQuery) {
+      return 'Tip: use sector or ESG keywords to discover relevant insight cohorts instantly.';
+    }
+    if (isFetching) {
+      return `Searching for “${debouncedQuery}”...`;
+    }
+    if (companies.length === 0) {
+      return `No matches found for “${debouncedQuery}”. Try refining your terms.`;
+    }
+    const visible = Math.min(dropdownResults.length, companies.length);
+    return `Showing ${visible} of ${companies.length} matches for “${debouncedQuery}”.`;
+  }, [companies.length, debouncedQuery, dropdownResults.length, isFetching, trimmedQuery]);
 
   return (
     <section aria-labelledby="company-search" className="rounded-3xl border border-gray-200 bg-white p-8 shadow-sm">
@@ -166,15 +233,72 @@ export function CompanySearch() {
       </header>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 lg:flex-row lg:items-center">
-        <div className="relative flex-1">
+        <div className="relative flex-1" ref={inputContainerRef}>
           <Search className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
           <input
             value={query}
-            onChange={event => setQuery(event.target.value)}
+            onChange={event => {
+              setQuery(event.target.value);
+              setIsDropdownOpen(true);
+            }}
+            onFocus={() => {
+              if (trimmedQuery) {
+                setIsDropdownOpen(true);
+              }
+            }}
             placeholder="Search by company, ticker, product, or ESG theme..."
-            className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-4 text-base text-gray-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-100"
+            className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-12 text-base text-gray-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-100"
             aria-label="Search companies and supply chain entities"
           />
+          <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+            {isFetching || isLoading ? (
+              <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+            ) : !trimmedQuery ? (
+              <kbd className="rounded-lg border border-gray-300 bg-white px-2 py-1 text-xs font-semibold text-gray-400 shadow-sm">
+                ⌘K
+              </kbd>
+            ) : null}
+          </div>
+
+          {isDropdownOpen && trimmedQuery && (
+            <div className="absolute left-0 right-0 top-[calc(100%+0.5rem)] z-50 max-h-80 overflow-y-auto rounded-2xl border border-gray-200 bg-white shadow-xl">
+              {isFetching ? (
+                <div className="flex flex-col items-center gap-2 px-4 py-6 text-sm text-gray-500">
+                  <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
+                  Searching companies...
+                </div>
+              ) : dropdownResults.length > 0 ? (
+                <ul className="divide-y divide-gray-100">
+                  {dropdownResults.map(company => (
+                    <li key={company.id}>
+                      <button
+                        type="button"
+                        onClick={() => handleSelectCompany(company)}
+                        className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left transition hover:bg-gray-50"
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-100 to-emerald-200 text-sm font-semibold text-emerald-700">
+                            {getInitials(company.name)}
+                          </div>
+                          <div className="min-w-0">
+                            <p className="truncate text-sm font-semibold text-gray-900">{company.name}</p>
+                            <p className="truncate text-xs text-gray-500">
+                              {company.ticker} &bull; {company.industry || '—'}
+                            </p>
+                          </div>
+                        </div>
+                        <ArrowRight className="h-4 w-4 text-emerald-600" />
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="px-4 py-6 text-center text-sm text-gray-500">
+                  No companies found for “{debouncedQuery}”.
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <Button
           type="submit"
@@ -195,6 +319,10 @@ export function CompanySearch() {
           )}
         </Button>
       </form>
+
+      {feedbackMessage && (
+        <div className="mt-2 text-xs font-medium text-gray-500">{feedbackMessage}</div>
+      )}
 
       <div className="mt-6 flex flex-wrap items-center gap-3">
         {filterOptions.map(option => {
@@ -288,6 +416,7 @@ export function CompanySearch() {
                   onClick={() => {
                     setQuery(idea);
                     setActiveFilter('All');
+                    setIsDropdownOpen(true);
                   }}
                   className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
                 >
