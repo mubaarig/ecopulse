@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Providers } from './providers';
 import { ToastProvider } from '@/components/ui/toast-provider';
+import { ErrorBoundary } from '@/components/error-boundary';
+
 import { Inter } from 'next/font/google';
 
 import './globals.css';
@@ -17,10 +19,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <ToastProvider />
-          <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">{children}</div>
-        </Providers>
+        <ErrorBoundary>
+          <Providers>
+            <ToastProvider />
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+              {children}
+            </div>
+          </Providers>
+        </ErrorBoundary>
       </body>
     </html>
   );

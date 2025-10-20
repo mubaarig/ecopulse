@@ -2,14 +2,13 @@ import { notFound } from 'next/navigation';
 import { CompanyDashboard } from '@/components/features/company-dashboard';
 import { apiClient } from '@/lib/api/client';
 
-interface PageProps {
-  params: {
-    ticker: string;
-  };
-}
+type CompanyPageProps = {
+  params: Promise<{ ticker: string }>;
+};
 
-export default async function CompanyPage({ params }: PageProps) {
-  const company = await apiClient.getCompanyDetails(params.ticker);
+export default async function CompanyPage({ params }: CompanyPageProps) {
+  const { ticker } = await params;
+  const company = await apiClient.getCompanyDetails(ticker);
 
   if (!company) {
     notFound();
