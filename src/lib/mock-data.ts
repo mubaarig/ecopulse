@@ -1,5 +1,12 @@
 import { faker } from '@faker-js/faker';
-import { Company, CompanyDetails, ESGScore } from '@/types';
+import {
+  Company,
+  CompanyDetails,
+  CompanySearchMeta,
+  ESGScore,
+  TrendingIdea,
+  WatchlistPipeline,
+} from '@/types';
 
 // Generate realistic company names and tickers
 const COMPANY_DATA = [
@@ -119,5 +126,62 @@ export const mockData = {
         company.ticker.toLowerCase().includes(lowerQuery) ||
         company.industry.toLowerCase().includes(lowerQuery),
     );
+  },
+
+  getCompanySearchMeta(): CompanySearchMeta {
+    const companies = this.getCompanies();
+    const industries = Array.from(new Set(companies.map((company) => company.industry))).filter(
+      Boolean,
+    );
+
+    const filters = ['All', ...industries.slice(0, 6)];
+    const suggestions = companies.slice(0, 8);
+
+    const trendingIdeas: TrendingIdea[] = suggestions.map((company, index) => {
+      const changeValue = faker.number.int({ min: -250, max: 450 }) / 100;
+      const changePercentage = `${changeValue >= 0 ? '+' : ''}${changeValue.toFixed(2)}%`;
+
+      return {
+        id: `trend-${company.ticker}-${index}`,
+        label: `${company.name} ESG momentum`,
+        query: company.name,
+        changePercentage,
+        context: faker.helpers.arrayElement([
+          'Scope 3 hotspot alerts',
+          'New climate disclosure',
+          'SBTi commitment update',
+          'Supplier audit signal',
+        ]),
+      };
+    });
+
+    const watchlistPipelines: WatchlistPipeline[] = industries
+      .slice(0, 4)
+      .map((industry, index) => {
+        const changeValue = faker.number.int({ min: -150, max: 320 }) / 100;
+        const changePercentage = `${changeValue >= 0 ? '+' : ''}${changeValue.toFixed(2)}%`;
+
+        return {
+          id: `pipeline-${index}`,
+          title: `${industry} engagement pipeline`,
+          subtitle: faker.helpers.arrayElement([
+            'Supplier audits scheduled',
+            'Climate disclosure follow-up',
+            'High-risk vendor outreach',
+            'Board engagement roundtables',
+          ]),
+          changePercentage,
+          companyCount: faker.number.int({ min: 6, max: 18 }),
+          status: faker.helpers.arrayElement(['Monitoring', 'In progress', 'Scheduled']),
+          query: industry,
+        };
+      });
+
+    return {
+      filters,
+      suggestions,
+      trendingIdeas,
+      watchlistPipelines,
+    };
   },
 };

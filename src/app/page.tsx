@@ -27,7 +27,6 @@ export default function DashboardPage() {
 
       {/* Stats Preview */}
       <StatsGrid />
-      <hr />
       {/* <StatsGrid2/> */}
 
       {/* Recent Searches */}

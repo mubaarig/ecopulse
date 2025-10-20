@@ -61,6 +61,11 @@
     --foreground: #ededed;
   }
 }
+a {
+  color: gray;
+  font-weight: bold;
+  cursor: pointer;
+}
 
 body {
   background: var(--background);
