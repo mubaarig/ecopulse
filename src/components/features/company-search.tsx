@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Building2, Globe, Loader2, Search, Sparkles, TrendingUp } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
@@ -8,66 +8,18 @@ import toast from 'react-hot-toast';
 
 import { Button } from '@/components/ui/button';
 import { apiClient } from '@/lib/api/client';
-import type { Company } from '@/types';
-
-const SUGGESTED_COMPANIES: Company[] = [
-  {
-    id: 'msft',
-    name: 'Microsoft Corp.',
-    ticker: 'MSFT',
-    industry: 'Technology',
-  },
-  {
-    id: 'tsla',
-    name: 'Tesla, Inc.',
-    ticker: 'TSLA',
-    industry: 'Automotive',
-  },
-  {
-    id: 'enph',
-    name: 'Enphase Energy',
-    ticker: 'ENPH',
-    industry: 'Energy',
-  },
-  {
-    id: 'ulvr',
-    name: 'Unilever PLC',
-    ticker: 'UL',
-    industry: 'Consumer Staples',
-  },
-  {
-    id: 'ntrs',
-    name: 'Northern Trust',
-    ticker: 'NTRS',
-    industry: 'Financials',
-  },
-  {
-    id: 'ibm',
-    name: 'IBM',
-    ticker: 'IBM',
-    industry: 'Technology',
-  },
-];
-
-const TRENDING_IDEAS = [
-  'Low-carbon logistics leaders',
-  'Net-zero commitments 2040',
-  'Clean energy storage partnerships',
-  'Human rights audit results',
-];
-
-const WATCHLIST_PIPELINES = [
-  'Climate transition leaders',
-  'High-risk supply chain nodes',
-  'Pending shareholder engagements',
-];
+import type { Company, CompanySearchMeta } from '@/types';
 
 function getInitials(name: string) {
+  if (!name) {
+    return '';
+  }
+
   return name
     .split(' ')
     .filter(Boolean)
-    .map((part) => part[0]?.toUpperCase() ?? '')
     .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() ?? '')
     .join('');
 }
 
@@ -77,126 +29,222 @@ export function CompanySearch() {
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-  const trimmedQuery = query.trim();
-  const searchEnabled = debouncedQuery.length > 0;
-
   const router = useRouter();
-  const inputContainerRef = useRef<HTMLDivElement>(null);
+  const inputContainerRef = useRef<HTMLDivElement | null>(null);
+
+  // Preload discovery metadata (filters, suggestions, watchlists) for richer defaults
+  const {
+    data: searchMeta,
+    isLoading: isMetaLoading,
+    error: metaError,
+  } = useQuery<CompanySearchMeta>({
+    queryKey: ['company-search-meta'],
+    queryFn: () => apiClient.getCompanySearchMeta(),
+    staleTime: 10 * 60 * 1000,
+  });
+
+  const trimmedQuery = useMemo(() => query.trim(), [query]);
+  const searchEnabled = trimmedQuery.length > 0;
+
+  // Keep filters aligned with backend-provided facets; always include an "All" catch-all
+  const filterOptions = useMemo(() => {
+    const filters = searchMeta?.filters ?? [];
+    if (!filters.length) {
+      return ['All'];
+    }
+
+    const hasAll = filters.some((filter) => filter.toLowerCase() === 'all');
+    return hasAll ? filters : ['All', ...filters];
+  }, [searchMeta]);
+
+  // Ensure the current filter stays valid when new metadata arrives
+  useEffect(() => {
+    if (!filterOptions.length) {
+      return;
+    }
+
+    setActiveFilter((current) =>
+      filterOptions.includes(current) ? current : (filterOptions[0] ?? 'All'),
+    );
+  }, [filterOptions]);
+
+  const defaultSuggestions = useMemo(
+    () => (searchMeta?.suggestions ?? []).slice(0, 8),
+    [searchMeta],
+  );
+  const trendingIdeas = searchMeta?.trendingIdeas ?? [];
+  const watchlistPipelines = searchMeta?.watchlistPipelines ?? [];
 
   useEffect(() => {
-    const timer = window.setTimeout(() => {
-      setDebouncedQuery(trimmedQuery);
+    const timer = setTimeout(() => {
+      setDebouncedQuery(query);
     }, 300);
 
-    return () => window.clearTimeout(timer);
-  }, [trimmedQuery]);
+    return () => clearTimeout(timer);
+  }, [query]);
+
+  const {
+    data: companies = [],
+    isLoading,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ['company-search', debouncedQuery],
+    queryFn: () => apiClient.searchCompanies(debouncedQuery),
+    enabled: debouncedQuery.length > 0,
+    staleTime: 5 * 60 * 1000,
+  });
 
   useEffect(() => {
-    if (!trimmedQuery) {
+    if (!searchEnabled) {
       setIsDropdownOpen(false);
     }
-  }, [trimmedQuery]);
+  }, [searchEnabled]);
 
   useEffect(() => {
     if (!isDropdownOpen) {
       return;
     }
 
-    const handleOutsideClick = (event: MouseEvent) => {
+    const handleClick = (event: MouseEvent) => {
       if (inputContainerRef.current && !inputContainerRef.current.contains(event.target as Node)) {
         setIsDropdownOpen(false);
       }
     };
 
-    document.addEventListener('mousedown', handleOutsideClick);
-    return () => document.removeEventListener('mousedown', handleOutsideClick);
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClick);
+    document.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClick);
+      document.removeEventListener('keydown', handleEscape);
+    };
   }, [isDropdownOpen]);
 
-  const {
-    data: companies = [],
+  const dropdownResults = useMemo(() => {
+    if (!searchEnabled) {
+      return [];
+    }
+
+    return companies.slice(0, 8);
+  }, [companies, searchEnabled]);
+
+  // Derive the shortlist for the main card list, falling back to discovery suggestions when idle
+  const filteredCompanies = useMemo(() => {
+    if (searchEnabled) {
+      if (!companies.length) {
+        return [];
+      }
+
+      const shortlist = companies.slice(0, 8);
+
+      if (activeFilter === 'All') {
+        return shortlist;
+      }
+
+      const normalizedFilter = activeFilter.toLowerCase();
+      const filtered = shortlist.filter((company) => {
+        const haystack =
+          `${company.name ?? ''} ${company.ticker ?? ''} ${company.industry ?? ''}`.toLowerCase();
+        return haystack.includes(normalizedFilter);
+      });
+
+      return filtered.length > 0 ? filtered : shortlist;
+    }
+
+    if (!defaultSuggestions.length) {
+      return [];
+    }
+
+    const shortlist = defaultSuggestions.slice(0, 8);
+
+    if (activeFilter === 'All') {
+      return shortlist;
+    }
+
+    const normalizedFilter = activeFilter.toLowerCase();
+    const filtered = shortlist.filter((company) => {
+      const haystack =
+        `${company.name ?? ''} ${company.ticker ?? ''} ${company.industry ?? ''}`.toLowerCase();
+      return haystack.includes(normalizedFilter);
+    });
+
+    return filtered.length > 0 ? filtered : shortlist;
+  }, [companies, searchEnabled, activeFilter, defaultSuggestions]);
+
+  const isEmptyState = searchEnabled && !isFetching && !isLoading && companies.length === 0;
+
+  // Craft concise status copy depending on search state and metadata availability
+  const feedbackMessage = useMemo(() => {
+    if (error) {
+      return 'Unable to load companies right now.';
+    }
+
+    if (metaError) {
+      return 'Unable to load discovery signals right now.';
+    }
+
+    if (!searchEnabled) {
+      if (isMetaLoading) {
+        return 'Loading discovery intelligence...';
+      }
+
+      if (defaultSuggestions.length) {
+        return 'Select a suggested company or explore a trending idea.';
+      }
+
+      return 'Search for companies or explore a trending analyst idea.';
+    }
+
+    if (isFetching || isLoading) {
+      return `Searching for “${trimmedQuery}”…`;
+    }
+
+    if (isEmptyState) {
+      return `No companies found for “${trimmedQuery}”.`;
+    }
+
+    return `Showing ${filteredCompanies.length} matches${activeFilter !== 'All' ? ` for ${activeFilter.toLowerCase()}` : ''}.`;
+  }, [
+    error,
+    metaError,
+    searchEnabled,
+    isMetaLoading,
+    defaultSuggestions.length,
     isFetching,
     isLoading,
-    error,
-  } = useQuery<Company[], Error>({
-    queryKey: ['company-search', debouncedQuery],
-    queryFn: () => apiClient.searchCompanies(debouncedQuery),
-    enabled: searchEnabled,
-    staleTime: 5 * 60 * 1000,
-  });
-
-  useEffect(() => {
-    if (error) {
-      toast.error('Failed to search companies. Please try again.');
-    }
-  }, [error]);
-
-  const filterOptions = useMemo(() => {
-    const industries = new Set<string>();
-    SUGGESTED_COMPANIES.forEach((company) => industries.add(company.industry));
-    companies.forEach((company) => {
-      if (company.industry) {
-        industries.add(company.industry);
-      }
-    });
-    return ['All', ...Array.from(industries).sort()];
-  }, [companies]);
-
-  useEffect(() => {
-    if (activeFilter !== 'All' && !filterOptions.includes(activeFilter)) {
-      setActiveFilter('All');
-    }
-  }, [filterOptions, activeFilter]);
-
-  const filteredCompanies = useMemo(() => {
-    const base = searchEnabled ? companies : SUGGESTED_COMPANIES;
-    const candidates =
-      activeFilter === 'All' ? base : base.filter((company) => company.industry === activeFilter);
-    const limit = searchEnabled ? 6 : 4;
-    return candidates.slice(0, limit);
-  }, [companies, searchEnabled, activeFilter]);
-
-  const dropdownResults = useMemo(() => companies.slice(0, 6), [companies]);
-
-  const isEmptyState = searchEnabled && !isFetching && filteredCompanies.length === 0;
+    trimmedQuery,
+    isEmptyState,
+    filteredCompanies.length,
+    activeFilter,
+  ]);
 
   const handleSelectCompany = (company: Company) => {
-    if (!company || !company.ticker || company.ticker === 'Private') {
-      toast.error('This company profile is unavailable right now.');
-      return;
-    }
-
     setQuery('');
     setDebouncedQuery('');
-    setActiveFilter('All');
     setIsDropdownOpen(false);
+    setActiveFilter(filterOptions[0] ?? 'All');
     router.push(`/company/${company.ticker}`);
-    toast.success(`Loading ${company.name} profile...`);
+    toast.success(`Loading ${company.name} data...`);
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (!debouncedQuery) {
-      return;
-    }
-    if (companies.length > 0) {
-      handleSelectCompany(companies[0]);
-    }
-    setIsDropdownOpen(false);
-  };
 
-  const feedbackMessage = useMemo(() => {
-    if (!trimmedQuery) {
-      return 'Tip: use sector or ESG keywords to discover relevant insight cohorts instantly.';
+    const firstSuggestion = dropdownResults[0] ?? filteredCompanies[0];
+
+    if (firstSuggestion) {
+      handleSelectCompany(firstSuggestion);
+    } else if (trimmedQuery) {
+      toast.error(`No companies found for “${trimmedQuery}”.`);
     }
-    if (isFetching) {
-      return `Searching for “${debouncedQuery}”...`;
-    }
-    if (companies.length === 0) {
-      return `No matches found for “${debouncedQuery}”. Try refining your terms.`;
-    }
-    const visible = Math.min(dropdownResults.length, companies.length);
-    return `Showing ${visible} of ${companies.length} matches for “${debouncedQuery}”.`;
-  }, [companies.length, debouncedQuery, dropdownResults.length, isFetching, trimmedQuery]);
+  };
 
   return (
     <section
@@ -236,7 +284,7 @@ export function CompanySearch() {
             value={query}
             onChange={(event) => {
               setQuery(event.target.value);
-              setIsDropdownOpen(true);
+              setIsDropdownOpen(Boolean(event.target.value.trim()));
             }}
             onFocus={() => {
               if (trimmedQuery) {
@@ -352,7 +400,9 @@ export function CompanySearch() {
             <span className="text-xs font-medium text-gray-500">
               {searchEnabled && isFetching
                 ? 'Searching...'
-                : `Showing ${filteredCompanies.length} ${filteredCompanies.length === 1 ? 'result' : 'results'}`}
+                : !searchEnabled && isMetaLoading
+                  ? 'Loading discovery signals...'
+                  : `Showing ${filteredCompanies.length} ${filteredCompanies.length === 1 ? 'result' : 'results'}`}
             </span>
           </div>
           <ul className="space-y-3">
@@ -412,20 +462,41 @@ export function CompanySearch() {
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              {TRENDING_IDEAS.map((idea) => (
-                <button
-                  key={idea}
-                  type="button"
-                  onClick={() => {
-                    setQuery(idea);
-                    setActiveFilter('All');
-                    setIsDropdownOpen(true);
-                  }}
-                  className="rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
-                >
-                  {idea}
-                </button>
-              ))}
+              {trendingIdeas.length > 0 ? (
+                trendingIdeas.map((idea) => (
+                  <button
+                    key={idea.id}
+                    type="button"
+                    onClick={() => {
+                      setQuery(idea.query);
+                      setDebouncedQuery(idea.query);
+                      setActiveFilter(filterOptions[0] ?? 'All');
+                      setIsDropdownOpen(true);
+                    }}
+                    className="flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                  >
+                    <span>{idea.label}</span>
+                    {idea.changePercentage && (
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                          idea.changePercentage.trim().startsWith('-')
+                            ? 'bg-red-100 text-red-600'
+                            : 'bg-emerald-100 text-emerald-700'
+                        }`}
+                      >
+                        {idea.changePercentage}
+                      </span>
+                    )}
+                    {idea.context && !idea.changePercentage && (
+                      <span className="text-[10px] font-medium text-emerald-700">
+                        {idea.context}
+                      </span>
+                    )}
+                  </button>
+                ))
+              ) : (
+                <p className="text-xs text-gray-500">Discovery signals update every few minutes.</p>
+              )}
             </div>
           </div>
 
@@ -440,16 +511,75 @@ export function CompanySearch() {
               </div>
             </div>
             <div className="mt-4 space-y-3 text-sm">
-              {WATCHLIST_PIPELINES.map((pipeline) => (
-                <button
-                  key={pipeline}
-                  type="button"
-                  className="flex w-full items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-left font-medium text-gray-700 transition hover:border-emerald-200 hover:bg-emerald-50"
-                >
-                  {pipeline}
-                  <ArrowRight className="h-4 w-4 text-emerald-600" />
-                </button>
-              ))}
+              {watchlistPipelines.length > 0 ? (
+                watchlistPipelines.map((pipeline) => {
+                  const changeIsNegative = pipeline.changePercentage?.trim().startsWith('-');
+
+                  return (
+                    <button
+                      key={pipeline.id}
+                      type="button"
+                      onClick={() => {
+                        if (!pipeline.query) {
+                          return;
+                        }
+                        setQuery(pipeline.query);
+                        setDebouncedQuery(pipeline.query);
+                        const nextFilter =
+                          filterOptions.find(
+                            (option) => option.toLowerCase() === pipeline.query.toLowerCase(),
+                          ) ??
+                          filterOptions[0] ??
+                          'All';
+                        setActiveFilter(nextFilter);
+                        setIsDropdownOpen(Boolean(pipeline.query.trim()));
+                      }}
+                      className="flex w-full items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-left font-medium text-gray-700 transition hover:border-emerald-200 hover:bg-emerald-50"
+                    >
+                      <div>
+                        <p className="font-semibold text-gray-900">{pipeline.title}</p>
+                        <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-gray-500">
+                          {pipeline.subtitle && <span>{pipeline.subtitle}</span>}
+                          {pipeline.companyCount && (
+                            <span className="font-medium text-gray-600">
+                              {pipeline.companyCount} companies
+                            </span>
+                          )}
+                          {pipeline.status && (
+                            <span
+                              className={`rounded-full px-2 py-0.5 font-semibold ${
+                                pipeline.status === 'Action required'
+                                  ? 'bg-red-100 text-red-600'
+                                  : 'bg-emerald-100 text-emerald-700'
+                              }`}
+                            >
+                              {pipeline.status}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {pipeline.changePercentage && (
+                          <span
+                            className={`rounded-full px-2 py-1 text-xs font-semibold ${
+                              changeIsNegative
+                                ? 'bg-red-100 text-red-600'
+                                : 'bg-emerald-100 text-emerald-700'
+                            }`}
+                          >
+                            {pipeline.changePercentage}
+                          </span>
+                        )}
+                        <ArrowRight className="h-4 w-4 text-emerald-600" />
+                      </div>
+                    </button>
+                  );
+                })
+              ) : (
+                <p className="text-xs text-gray-500">
+                  Create a watchlist to track supplier engagement, risk, or disclosure momentum.
+                </p>
+              )}
             </div>
           </div>
 
