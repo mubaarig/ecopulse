@@ -18,6 +18,7 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-50 border-b border-emerald-100 bg-white/85 backdrop-blur">
+      <link rel="icon" href="/icon?<generated>" type="image/<generated>" sizes="<generated>" />
       <div className="flex h-16 items-center px-8">
         <div className="flex items-center space-x-4">
           {isCompanyPage && (
@@ -29,8 +30,16 @@ export function DashboardHeader() {
               <span className="text-sm font-medium">Back</span>
             </button>
           )}
+
           <Link href="/" className="group flex items-center gap-2">
-            <Image src="/ecopulse-logo.png" alt="EcoPulse logo" width={100} height={50} priority />
+            <Image
+              src="/ecopulse-logo.png"
+              width={100} // Set to 0 as it will be controlled by CSS
+              height={50} // Set to 0 as it will be controlled by CSS
+              sizes="100vw" // Recommended for responsive images
+              style={{ width: '100%', height: 'auto' }}
+              alt="Logo"
+            />
           </Link>
         </div>
 
