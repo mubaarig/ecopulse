@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Home, Search } from 'lucide-react';
+import { Home } from 'lucide-react';
 
 export default function NotFound() {
   return (
@@ -9,7 +9,8 @@ export default function NotFound() {
           <h1 className="text-9xl font-bold text-blue-600">404</h1>
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Page Not Found</h2>
           <p className="text-gray-600 mb-8">
-            The company or page you're looking for doesn't exist or hasn't been added to our database yet.
+            The company or page you&apos;re looking for doesn&apos;t exist or hasn&apos;t been added
+            to our database yet.
           </p>
         </div>
 
@@ -21,9 +22,7 @@ export default function NotFound() {
             <Home className="h-4 w-4" />
             <span>Back to Home</span>
           </Link>
-          <div className="text-sm text-gray-500">
-            Or try searching for a different company
-          </div>
+          <div className="text-sm text-gray-500">Or try searching for a different company</div>
         </div>
       </div>
     </div>

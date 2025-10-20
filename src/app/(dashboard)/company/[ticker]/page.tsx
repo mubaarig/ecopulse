@@ -2,9 +2,11 @@ import { notFound } from 'next/navigation';
 import { CompanyDashboard } from '@/components/features/company-dashboard';
 import { apiClient } from '@/lib/api/client';
 
-type CompanyPageProps = {
-  params: Promise<{ ticker: string }>;
-};
+interface CompanyPageProps {
+  params: Promise<{
+    ticker: string;
+  }>;
+}
 
 export default async function CompanyPage({ params }: CompanyPageProps) {
   const { ticker } = await params;
@@ -14,9 +16,5 @@ export default async function CompanyPage({ params }: CompanyPageProps) {
     notFound();
   }
 
-  return (
-    <div className="space-y-6">
-      <CompanyDashboard company={company} />
-    </div>
-  );
+  return <CompanyDashboard company={company} />;
 }
