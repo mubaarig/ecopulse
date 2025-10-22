@@ -311,9 +311,7 @@ export function CompanySearch() {
           <h2 id="company-search" className="text-2xl font-semibold text-gray-900">
             {t('title')}
           </h2>
-          <p className="text-sm text-gray-600">
-            {t('subtitle')}
-          </p>
+          <p className="text-sm text-gray-600">{t('subtitle')}</p>
         </div>
 
         <div className="flex items-center gap-3 self-start rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
@@ -429,14 +427,14 @@ export function CompanySearch() {
               onClick={() => setActiveFilter(option)}
               className={`rounded-full border px-3.5 py-1.5 text-sm transition ${
                 isActive
-              ? 'border-emerald-200 bg-emerald-50 text-emerald-700 shadow-sm'
-              : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-200 hover:text-emerald-700'
-            }`}
-          >
+                  ? 'border-emerald-200 bg-emerald-50 text-emerald-700 shadow-sm'
+                  : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-200 hover:text-emerald-700'
+              }`}
+            >
               {formatFilterLabel(option)}
-          </button>
-        );
-      })}
+            </button>
+          );
+        })}
       </div>
 
       <div className="mt-8 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
@@ -552,7 +550,10 @@ export function CompanySearch() {
               {watchlistPipelines.length > 0 ? (
                 watchlistPipelines.map((pipeline) => {
                   const changeIsNegative = pipeline.changePercentage?.trim().startsWith('-');
-                  const statusKey = pipeline.status?.toLowerCase() === 'action required' ? 'actionRequired' : undefined;
+                  const statusKey =
+                    pipeline.status?.toLowerCase() === 'action required'
+                      ? 'actionRequired'
+                      : undefined;
                   const statusLabel = statusKey
                     ? t(`watchlist.status.${statusKey}`)
                     : pipeline.status;

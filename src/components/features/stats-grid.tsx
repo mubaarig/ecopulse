@@ -174,7 +174,9 @@ export function StatsGrid() {
 
           <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-900">{t('coreMetricsCard.title')}</h3>
+              <h3 className="text-base font-semibold text-gray-900">
+                {t('coreMetricsCard.title')}
+              </h3>
               <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">
                 {t('coreMetricsCard.subtitle')}
               </span>

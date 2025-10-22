@@ -7,23 +7,22 @@ import { StatsGrid } from '@/components/features/stats-grid';
 import { Link } from '@/navigation';
 import { locales, type Locale } from '../../../i18n/config';
 
-export default async function DashboardPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+export default async function DashboardPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  const [t, common] = await Promise.all([getTranslations('dashboard'), getTranslations('common')]);
   const localeList = locales as readonly Locale[];
   const localeFlags: Record<Locale, string> = {
     en: '🇬🇧',
     de: '🇩🇪',
   };
+  const currentLocale = localeList.includes(locale as Locale) ? (locale as Locale) : localeList[0];
+  const [t, common] = await Promise.all([
+    getTranslations({ locale: currentLocale, namespace: 'dashboard' }),
+    getTranslations({ locale: currentLocale, namespace: 'common' }),
+  ]);
   const localeNames: Record<Locale, string> = {
     en: common('localeName.en'),
     de: common('localeName.de'),
   };
-  const currentLocale = localeList.includes(locale as Locale) ? (locale as Locale) : localeList[0];
 
   return (
     <div className="space-y-8">
@@ -41,33 +40,32 @@ export default async function DashboardPage({
               alt={common('logoAlt')}
             />
           </Link>
-           <div className="flex justify-center gap-2">
-          {localeList.map((code) => {
-            const isActive = code === currentLocale;
-            return (
-              <Link
-                key={code}
-                href="/"
-                locale={code}
-                className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition ${
-                  isActive
-                    ? 'border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm'
-                    : 'border-emerald-100 bg-white text-gray-600 shadow-sm hover:border-emerald-300 hover:text-emerald-600'
-                }`}
-                aria-label={common('languageButtonLabel', {
-                  locale: localeNames[code] ?? code.toUpperCase(),
-                })}
-              >
-                <span aria-hidden="true" className="text-base">
-                  {localeFlags[code] ?? '🌐'}
-                </span>
-                {code}
-              </Link>
-            );
-          })}
+          <div className="flex justify-center gap-2">
+            {localeList.map((code) => {
+              const isActive = code === currentLocale;
+              return (
+                <Link
+                  key={code}
+                  href="/"
+                  locale={code}
+                  className={`inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-semibold uppercase transition ${
+                    isActive
+                      ? 'border-emerald-300 bg-emerald-50 text-emerald-700 shadow-sm'
+                      : 'border-emerald-100 bg-white text-gray-600 shadow-sm hover:border-emerald-300 hover:text-emerald-600'
+                  }`}
+                  aria-label={common('languageButtonLabel', {
+                    locale: localeNames[code] ?? code.toUpperCase(),
+                  })}
+                >
+                  <span aria-hidden="true" className="text-base">
+                    {localeFlags[code] ?? '🌐'}
+                  </span>
+                  {code}
+                </Link>
+              );
+            })}
+          </div>
         </div>
-        </div>
-       
       </div>
 
       {/* Hero Section */}

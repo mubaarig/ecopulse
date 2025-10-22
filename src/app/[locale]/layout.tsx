@@ -40,9 +40,7 @@ export default async function LocaleLayout({
       <NextIntlClientProvider locale={localeParam} messages={messages}>
         <Providers>
           <ToastProvider />
-          <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {children}
-          </div>
+          <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">{children}</div>
         </Providers>
       </NextIntlClientProvider>
     </ErrorBoundary>

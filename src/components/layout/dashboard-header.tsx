@@ -28,9 +28,7 @@ export function DashboardHeader() {
     en: '🇬🇧',
     de: '🇩🇪',
   };
-  const currentLocale = localeList.includes(locale as Locale)
-    ? (locale as Locale)
-    : localeList[0];
+  const currentLocale = localeList.includes(locale as Locale) ? (locale as Locale) : localeList[0];
   const handleLocaleChange = (targetLocale: Locale) => {
     if (targetLocale === currentLocale) {
       return;

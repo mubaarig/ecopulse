@@ -71,9 +71,7 @@ export function SupplyChainMap({ ticker }: SupplyChainMapProps) {
                 {t('highRiskRegions', { count: highRiskCountries })}
               </span>
             </div>
-            <p className="text-xs text-amber-700">
-              {t('riskMessage')}
-            </p>
+            <p className="text-xs text-amber-700">{t('riskMessage')}</p>
           </div>
         )}
 
