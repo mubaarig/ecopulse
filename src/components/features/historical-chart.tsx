@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import {
   LineChart,
   Line,
@@ -11,6 +12,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { useQuery } from '@tanstack/react-query';
+import { useLocale, useTranslations } from 'next-intl';
 import { apiClient } from '@/lib/api/client';
 
 interface HistoricalChartProps {
@@ -18,15 +20,26 @@ interface HistoricalChartProps {
 }
 
 export function HistoricalChart({ ticker }: HistoricalChartProps) {
+  const t = useTranslations('historicalChart');
+  const locale = useLocale();
   const { data: historicalData, isLoading } = useQuery({
     queryKey: ['historical-data', ticker],
     queryFn: () => apiClient.getHistoricalData(ticker),
   });
 
+  const dateFormatter = useMemo(
+    () =>
+      new Intl.DateTimeFormat(locale, {
+        month: 'short',
+        year: '2-digit',
+      }),
+    [locale],
+  );
+
   if (isLoading) {
     return (
       <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Historical ESG Performance</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t('title')}</h2>
         <div className="h-80 flex items-center justify-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
         </div>
@@ -38,29 +51,29 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
   const chartData =
     historicalData?.map((item) => ({
       ...item,
-      date: new Date(item.date).toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
+      date: dateFormatter.format(new Date(item.date)),
     })) || [];
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-lg font-semibold text-gray-900">Historical ESG Performance</h2>
+        <h2 className="text-lg font-semibold text-gray-900">{t('title')}</h2>
         <div className="flex items-center space-x-4 text-sm">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-            <span className="text-gray-600">Overall</span>
+            <span className="text-gray-600">{t('series.overall')}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-gray-600">Environmental</span>
+            <span className="text-gray-600">{t('series.environmental')}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-            <span className="text-gray-600">Social</span>
+            <span className="text-gray-600">{t('series.social')}</span>
           </div>
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
-            <span className="text-gray-600">Governance</span>
+            <span className="text-gray-600">{t('series.governance')}</span>
           </div>
         </div>
       </div>
@@ -86,7 +99,7 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
               stroke="#3b82f6"
               strokeWidth={2}
               dot={{ fill: '#3b82f6', strokeWidth: 2, r: 4 }}
-              name="Overall Score"
+              name={t('series.overall')}
             />
             <Line
               type="monotone"
@@ -95,7 +108,7 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#10b981', strokeWidth: 2, r: 3 }}
-              name="Environmental"
+              name={t('series.environmental')}
             />
             <Line
               type="monotone"
@@ -104,7 +117,7 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 3 }}
-              name="Social"
+              name={t('series.social')}
             />
             <Line
               type="monotone"
@@ -113,7 +126,7 @@ export function HistoricalChart({ ticker }: HistoricalChartProps) {
               strokeWidth={2}
               strokeDasharray="5 5"
               dot={{ fill: '#f59e0b', strokeWidth: 2, r: 3 }}
-              name="Governance"
+              name={t('series.governance')}
             />
           </LineChart>
         </ResponsiveContainer>
