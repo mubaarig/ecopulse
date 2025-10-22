@@ -10,7 +10,12 @@ const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
 
 const baseConfig = {
   images: {
-    domains: ['logo.clearbit.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'logo.clearbit.com',
+      },
+    ],
   },
   outputFileTracingRoot: path.resolve(__dirname),
 };
