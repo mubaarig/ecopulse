@@ -520,19 +520,20 @@ export function CompanySearch() {
                       key={pipeline.id}
                       type="button"
                       onClick={() => {
-                        if (!pipeline.query) {
+                        const pipelineQuery = pipeline.query?.trim();
+                        if (!pipelineQuery) {
                           return;
                         }
-                        setQuery(pipeline.query);
-                        setDebouncedQuery(pipeline.query);
+                        setQuery(pipelineQuery);
+                        setDebouncedQuery(pipelineQuery);
                         const nextFilter =
                           filterOptions.find(
-                            (option) => option.toLowerCase() === pipeline.query.toLowerCase(),
+                            (option) => option.toLowerCase() === pipelineQuery.toLowerCase(),
                           ) ??
                           filterOptions[0] ??
                           'All';
                         setActiveFilter(nextFilter);
-                        setIsDropdownOpen(Boolean(pipeline.query.trim()));
+                        setIsDropdownOpen(true);
                       }}
                       className="flex w-full items-center justify-between rounded-xl border border-gray-100 bg-gray-50 px-4 py-3 text-left font-medium text-gray-700 transition hover:border-emerald-200 hover:bg-emerald-50"
                     >
