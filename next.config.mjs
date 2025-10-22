@@ -18,6 +18,9 @@ const baseConfig = {
     ],
   },
   outputFileTracingRoot: path.resolve(__dirname),
+  experimental: {
+    optimizeCss: false,
+  },
 };
 
 const withConfiguredPWA = withPWA({
