@@ -1,0 +1,36 @@
+{
+  "Dashboard": {
+    "title": "Nachhaltige Investment-Intelligenz",
+    "subtitle": "Analysieren Sie die ESG-Leistung, prognostizieren Sie zukünftige Trends und kartieren Sie die Lieferkettenauswirkungen börsennotierter Unternehmen.",
+    "searchPlaceholder": "Unternehmen suchen (versuchen Sie 'Apple', 'Tesla', 'Unilever')...",
+    "recentSearches": "Kürzlich analysierte Unternehmen",
+    "methodology": "Methodik"
+  },
+  "Company": {
+    "esgScore": "ESG-Score",
+    "overallScore": "Gesamtpunktzahl",
+    "environmental": "Umwelt",
+    "social": "Sozial",
+    "governance": "Unternehmensführung",
+    "historicalPerformance": "Historische ESG-Leistung",
+    "predictiveAnalysis": "KI-Prädiktive Analyse",
+    "supplyChainOverview": "Lieferkettenübersicht",
+    "lastUpdated": "Aktualisiert {lastUpdated}",
+    "trend": {
+      "up": "Verbessernd",
+      "down": "Rückläufig",
+      "stable": "Stabil"
+    },
+    "riskFactors": "Risikofaktoren",
+    "countries": "Länder",
+    "tonsCO2": "Tonnen CO₂",
+    "highRiskRegions": "Hochrisikoregionen"
+  },
+  "Common": {
+    "search": "Suchen",
+    "loading": "Lädt...",
+    "error": "Etwas ist schief gelaufen",
+    "tryAgain": "Erneut versuchen",
+    "backToHome": "Zurück zur Startseite"
+  }
+}
