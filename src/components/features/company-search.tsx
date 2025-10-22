@@ -1,10 +1,11 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Building2, Globe, Loader2, Search, Sparkles, TrendingUp } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 import toast from 'react-hot-toast';
+import { useTranslations } from 'next-intl';
 
 import { Button } from '@/components/ui/button';
 import { apiClient } from '@/lib/api/client';
@@ -28,6 +29,11 @@ export function CompanySearch() {
   const [debouncedQuery, setDebouncedQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('All');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const t = useTranslations('companySearch');
+  const formatFilterLabel = useCallback(
+    (option: string) => (option.toLowerCase() === 'all' ? t('filters.all') : option),
+    [t],
+  );
 
   const router = useRouter();
   const inputContainerRef = useRef<HTMLDivElement | null>(null);
@@ -183,35 +189,45 @@ export function CompanySearch() {
   // Craft concise status copy depending on search state and metadata availability
   const feedbackMessage = useMemo(() => {
     if (error) {
-      return 'Unable to load companies right now.';
+      return t('feedback.companiesError');
     }
 
     if (metaError) {
-      return 'Unable to load discovery signals right now.';
+      return t('feedback.metaError');
     }
 
     if (!searchEnabled) {
       if (isMetaLoading) {
-        return 'Loading discovery intelligence...';
+        return t('feedback.loadingMeta');
       }
 
       if (defaultSuggestions.length) {
-        return 'Select a suggested company or explore a trending idea.';
+        return t('feedback.selectSuggestion');
       }
 
-      return 'Search for companies or explore a trending analyst idea.';
+      return t('feedback.searchPrompt');
     }
 
     if (isFetching || isLoading) {
-      return `Searching for “${trimmedQuery}”…`;
+      return t('feedback.searching', { query: trimmedQuery });
     }
 
     if (isEmptyState) {
-      return `No companies found for “${trimmedQuery}”.`;
+      return t('feedback.empty', { query: trimmedQuery });
     }
 
-    return `Showing ${filteredCompanies.length} matches${activeFilter !== 'All' ? ` for ${activeFilter.toLowerCase()}` : ''}.`;
+    const count = filteredCompanies.length;
+
+    if (activeFilter === 'All') {
+      return t('feedback.results', { count });
+    }
+
+    return t('feedback.resultsFiltered', {
+      count,
+      filter: formatFilterLabel(activeFilter),
+    });
   }, [
+    t,
     error,
     metaError,
     searchEnabled,
@@ -223,7 +239,42 @@ export function CompanySearch() {
     isEmptyState,
     filteredCompanies.length,
     activeFilter,
+    formatFilterLabel,
   ]);
+
+  const suggestionsStatusText = useMemo(() => {
+    if (searchEnabled && isFetching) {
+      return t('suggested.status.searching');
+    }
+
+    if (!searchEnabled && isMetaLoading) {
+      return t('suggested.status.loadingMeta');
+    }
+
+    const count = filteredCompanies.length;
+
+    if (activeFilter === 'All') {
+      return t('suggested.status.results', { count });
+    }
+
+    return t('suggested.status.resultsFiltered', {
+      count,
+      filter: formatFilterLabel(activeFilter),
+    });
+  }, [
+    t,
+    searchEnabled,
+    isFetching,
+    isMetaLoading,
+    filteredCompanies.length,
+    activeFilter,
+    formatFilterLabel,
+  ]);
+
+  const lastUpdatedLabel = t.rich('lastUpdated', {
+    strong: (chunks) => <strong className="font-semibold text-gray-900">{chunks}</strong>,
+    time: t('lastUpdatedTime'),
+  });
 
   const handleSelectCompany = (company: Company) => {
     setQuery('');
@@ -231,7 +282,7 @@ export function CompanySearch() {
     setIsDropdownOpen(false);
     setActiveFilter(filterOptions[0] ?? 'All');
     router.push(`/company/${company.ticker}`);
-    toast.success(`Loading ${company.name} data...`);
+    toast.success(t('toast.loading', { company: company.name }));
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -242,7 +293,7 @@ export function CompanySearch() {
     if (firstSuggestion) {
       handleSelectCompany(firstSuggestion);
     } else if (trimmedQuery) {
-      toast.error(`No companies found for “${trimmedQuery}”.`);
+      toast.error(t('toast.empty', { query: trimmedQuery }));
     }
   };
 
@@ -255,22 +306,17 @@ export function CompanySearch() {
         <div className="space-y-2">
           <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-emerald-700">
             <Sparkles className="h-3.5 w-3.5" />
-            AI discovery
+            {t('badgeLabel')}
           </div>
           <h2 id="company-search" className="text-2xl font-semibold text-gray-900">
-            Company and supply chain intelligence search
+            {t('title')}
           </h2>
-          <p className="text-sm text-gray-600">
-            Surface ESG performance, disclosures, controversies, and risk signals across public
-            companies in seconds.
-          </p>
+          <p className="text-sm text-gray-600">{t('subtitle')}</p>
         </div>
 
         <div className="flex items-center gap-3 self-start rounded-2xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm text-gray-600">
           <TrendingUp className="h-4 w-4 text-emerald-600" />
-          <span>
-            Updated <strong className="font-semibold text-gray-900">12 minutes ago</strong>
-          </span>
+          <span>{lastUpdatedLabel}</span>
         </div>
       </header>
 
@@ -291,9 +337,9 @@ export function CompanySearch() {
                 setIsDropdownOpen(true);
               }
             }}
-            placeholder="Search by company, ticker, product, or ESG theme..."
+            placeholder={t('placeholder')}
             className="h-14 w-full rounded-2xl border border-gray-200 bg-gray-50 pl-12 pr-12 text-base text-gray-900 shadow-sm transition focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-100"
-            aria-label="Search companies and supply chain entities"
+            aria-label={t('ariaLabel')}
           />
           <div className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
             {isFetching || isLoading ? (
@@ -310,7 +356,7 @@ export function CompanySearch() {
               {isFetching ? (
                 <div className="flex flex-col items-center gap-2 px-4 py-6 text-sm text-gray-500">
                   <Loader2 className="h-5 w-5 animate-spin text-emerald-500" />
-                  Searching companies...
+                  {t('dropdown.searching')}
                 </div>
               ) : dropdownResults.length > 0 ? (
                 <ul className="divide-y divide-gray-100">
@@ -341,7 +387,7 @@ export function CompanySearch() {
                 </ul>
               ) : (
                 <div className="px-4 py-6 text-center text-sm text-gray-500">
-                  No companies found for “{debouncedQuery}”.
+                  {t('dropdown.empty', { query: debouncedQuery })}
                 </div>
               )}
             </div>
@@ -356,11 +402,11 @@ export function CompanySearch() {
           {searchEnabled && isFetching ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Searching...
+              {t('buttons.submitting')}
             </>
           ) : (
             <>
-              Run search
+              {t('buttons.submit')}
               <ArrowRight className="h-4 w-4" />
             </>
           )}
@@ -385,7 +431,7 @@ export function CompanySearch() {
                   : 'border-gray-200 bg-white text-gray-600 hover:border-emerald-200 hover:text-emerald-700'
               }`}
             >
-              {option}
+              {formatFilterLabel(option)}
             </button>
           );
         })}
@@ -395,15 +441,9 @@ export function CompanySearch() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-500">
-              Suggested matches
+              {t('suggested.title')}
             </h3>
-            <span className="text-xs font-medium text-gray-500">
-              {searchEnabled && isFetching
-                ? 'Searching...'
-                : !searchEnabled && isMetaLoading
-                  ? 'Loading discovery signals...'
-                  : `Showing ${filteredCompanies.length} ${filteredCompanies.length === 1 ? 'result' : 'results'}`}
-            </span>
+            <span className="text-xs font-medium text-gray-500">{suggestionsStatusText}</span>
           </div>
           <ul className="space-y-3">
             {filteredCompanies.map((company) => (
@@ -429,7 +469,7 @@ export function CompanySearch() {
                   onClick={() => handleSelectCompany(company)}
                   disabled={!company.ticker || company.ticker === 'Private'}
                 >
-                  Open profile
+                  {t('suggested.openProfile')}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </li>
@@ -438,13 +478,13 @@ export function CompanySearch() {
               <li className="rounded-2xl border border-dashed border-emerald-200 bg-emerald-50 p-6 text-center text-sm text-emerald-700">
                 <div className="flex flex-col items-center gap-2">
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  Searching companies...
+                  {t('suggested.loading')}
                 </div>
               </li>
             )}
             {isEmptyState && (
               <li className="rounded-2xl border border-dashed border-gray-200 bg-white p-8 text-center text-sm text-gray-500">
-                No companies found yet. Try adjusting your filters or explore a trending idea.
+                {t('suggested.empty')}
               </li>
             )}
           </ul>
@@ -455,10 +495,8 @@ export function CompanySearch() {
             <div className="flex items-center gap-3">
               <Globe className="h-10 w-10 rounded-full bg-emerald-50 p-2 text-emerald-600" />
               <div>
-                <h3 className="text-base font-semibold text-gray-900">Trending themes</h3>
-                <p className="text-sm text-gray-600">
-                  Jump into what other analysts are exploring this week.
-                </p>
+                <h3 className="text-base font-semibold text-gray-900">{t('trending.title')}</h3>
+                <p className="text-sm text-gray-600">{t('trending.description')}</p>
               </div>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
@@ -495,7 +533,7 @@ export function CompanySearch() {
                   </button>
                 ))
               ) : (
-                <p className="text-xs text-gray-500">Discovery signals update every few minutes.</p>
+                <p className="text-xs text-gray-500">{t('trending.empty')}</p>
               )}
             </div>
           </div>
@@ -504,16 +542,21 @@ export function CompanySearch() {
             <div className="flex items-center gap-3">
               <Building2 className="h-10 w-10 rounded-full bg-gray-100 p-2 text-gray-600" />
               <div>
-                <h3 className="text-base font-semibold text-gray-900">Watchlist pipelines</h3>
-                <p className="text-sm text-gray-600">
-                  Load saved cohorts to monitor progress and engagement outcomes.
-                </p>
+                <h3 className="text-base font-semibold text-gray-900">{t('watchlist.title')}</h3>
+                <p className="text-sm text-gray-600">{t('watchlist.description')}</p>
               </div>
             </div>
             <div className="mt-4 space-y-3 text-sm">
               {watchlistPipelines.length > 0 ? (
                 watchlistPipelines.map((pipeline) => {
                   const changeIsNegative = pipeline.changePercentage?.trim().startsWith('-');
+                  const statusKey =
+                    pipeline.status?.toLowerCase() === 'action required'
+                      ? 'actionRequired'
+                      : undefined;
+                  const statusLabel = statusKey
+                    ? t(`watchlist.status.${statusKey}`)
+                    : pipeline.status;
 
                   return (
                     <button
@@ -543,7 +586,7 @@ export function CompanySearch() {
                           {pipeline.subtitle && <span>{pipeline.subtitle}</span>}
                           {pipeline.companyCount && (
                             <span className="font-medium text-gray-600">
-                              {pipeline.companyCount} companies
+                              {t('watchlist.companyCount', { count: pipeline.companyCount })}
                             </span>
                           )}
                           {pipeline.status && (
@@ -554,7 +597,7 @@ export function CompanySearch() {
                                   : 'bg-emerald-100 text-emerald-700'
                               }`}
                             >
-                              {pipeline.status}
+                              {statusLabel}
                             </span>
                           )}
                         </div>
@@ -577,9 +620,7 @@ export function CompanySearch() {
                   );
                 })
               ) : (
-                <p className="text-xs text-gray-500">
-                  Create a watchlist to track supplier engagement, risk, or disclosure momentum.
-                </p>
+                <p className="text-xs text-gray-500">{t('watchlist.empty')}</p>
               )}
             </div>
           </div>
@@ -588,12 +629,10 @@ export function CompanySearch() {
             <div className="flex items-start gap-3">
               <TrendingUp className="mt-1 h-4 w-4 text-emerald-600" />
               <div>
-                <p className="font-semibold">Try natural language prompts</p>
+                <p className="font-semibold">{t('tips.title')}</p>
                 <p className="mt-1">
-                  Example:{' '}
-                  <span className="font-medium text-emerald-800">
-                    &ldquo;Scope 3 laggards in automotive suppliers with new CDP filings&rdquo;
-                  </span>
+                  {t('tips.exampleLabel')}{' '}
+                  <span className="font-medium text-emerald-800">{t('tips.example')}</span>
                 </p>
               </div>
             </div>

@@ -1,7 +1,7 @@
 'use client';
 import { DashboardHeader } from '@/components/layout/dashboard-header';
 import { motion, AnimatePresence } from 'framer-motion';
-import { usePathname } from 'next/navigation';
+import { usePathname } from '@/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

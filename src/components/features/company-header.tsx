@@ -3,12 +3,18 @@
 import { CompanyDetails } from '@/types';
 import { Building2, MapPin, TrendingUp, TrendingDown, Minus } from 'lucide-react';
 import { formatNumber } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface CompanyHeaderProps {
   company: CompanyDetails;
 }
 
 export function CompanyHeader({ company }: CompanyHeaderProps) {
+  const t = useTranslations('company');
+  const trendKey = ['up', 'down', 'stable'].includes(company.esgScore.trend)
+    ? (company.esgScore.trend as 'up' | 'down' | 'stable')
+    : 'stable';
+
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
@@ -51,7 +57,7 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
               </div>
               {company.marketCap && (
                 <div className="flex items-center space-x-1">
-                  <span>Market Cap: ${formatNumber(company.marketCap)}</span>
+                  <span>{t('marketCap', { value: `$${formatNumber(company.marketCap)}` })}</span>
                 </div>
               )}
             </div>
@@ -60,21 +66,17 @@ export function CompanyHeader({ company }: CompanyHeaderProps) {
 
         {/* ESG Trend Indicator */}
         <div className="flex items-center space-x-2 bg-gray-50 rounded-lg px-3 py-2">
-          {getTrendIcon(company.esgScore.trend)}
+          {getTrendIcon(trendKey)}
           <span
             className={`text-sm font-medium ${
-              company.esgScore.trend === 'up'
+              trendKey === 'up'
                 ? 'text-green-700'
-                : company.esgScore.trend === 'down'
+                : trendKey === 'down'
                   ? 'text-red-700'
                   : 'text-gray-700'
             }`}
           >
-            {company.esgScore.trend === 'up'
-              ? 'Improving'
-              : company.esgScore.trend === 'down'
-                ? 'Declining'
-                : 'Stable'}
+            {t(`trend.${trendKey}`)}
           </span>
         </div>
       </div>

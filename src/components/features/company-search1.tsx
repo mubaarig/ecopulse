@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api/client';
 import { Company } from '@/types';
 import toast from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/navigation';
 
 export function CompanySearch() {
   const [query, setQuery] = useState('');
