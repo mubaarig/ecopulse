@@ -42,3 +42,16 @@ A cutting-edge web application that provides AI-powered ESG (Environmental, Soci
    git clone https://github.com/yourusername/ecopulse.git
    cd ecopulse
    ```
+2. **Install dependencies**
+   ```bash
+   npm install
+   ```
+3. **Start the development server**
+   ```bash
+   npm run dev
+   ```
+
+## 🧪 Testing
+
+- `npm run test` - execute the Vitest suite once (CI-friendly)
+- `npm run test:watch` - start Vitest in watch mode for local development
