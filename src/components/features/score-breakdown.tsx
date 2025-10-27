@@ -1,86 +1,129 @@
 'use client';
 
-import { ESGScore } from '@/types';
+import { useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 import { Leaf, Users, Shield, AlertTriangle, CheckCircle } from 'lucide-react';
+
+import { ESGScore } from '@/types';
+
+type CategoryKey = 'environmental' | 'social' | 'governance';
+type FactorKey =
+  | 'carbonEmissions'
+  | 'waterUsage'
+  | 'wasteManagement'
+  | 'employeeDiversity'
+  | 'communityImpact'
+  | 'laborPractices'
+  | 'boardDiversity'
+  | 'executivePay'
+  | 'shareholderRights';
 
 interface ScoreBreakdownProps {
   score: ESGScore;
 }
 
+interface MetricConfig {
+  icon: React.ComponentType<{ className?: string }>;
+  categoryKey: CategoryKey;
+  score: number;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  factors: Array<{ key: FactorKey; isGood: boolean }>;
+}
+
 export function ScoreBreakdown({ score }: ScoreBreakdownProps) {
-  const metrics = [
-    {
-      icon: Leaf,
-      category: 'Environmental',
-      score: score.environmental,
-      color: 'text-green-600',
-      bgColor: 'bg-green-50',
-      borderColor: 'border-green-200',
-      factors: [
-        { name: 'Carbon Emissions', status: score.environmental > 70 ? 'good' : 'warning' },
-        { name: 'Water Usage', status: score.environmental > 60 ? 'good' : 'warning' },
-        { name: 'Waste Management', status: score.environmental > 65 ? 'good' : 'warning' },
-      ]
-    },
-    {
-      icon: Users,
-      category: 'Social',
-      score: score.social,
-      color: 'text-purple-600',
-      bgColor: 'bg-purple-50',
-      borderColor: 'border-purple-200',
-      factors: [
-        { name: 'Employee Diversity', status: score.social > 75 ? 'good' : 'warning' },
-        { name: 'Community Impact', status: score.social > 65 ? 'good' : 'warning' },
-        { name: 'Labor Practices', status: score.social > 70 ? 'good' : 'warning' },
-      ]
-    },
-    {
-      icon: Shield,
-      category: 'Governance',
-      score: score.governance,
-      color: 'text-amber-600',
-      bgColor: 'bg-amber-50',
-      borderColor: 'border-amber-200',
-      factors: [
-        { name: 'Board Diversity', status: score.governance > 65 ? 'good' : 'warning' },
-        { name: 'Executive Pay', status: score.governance > 60 ? 'good' : 'warning' },
-        { name: 'Shareholder Rights', status: score.governance > 70 ? 'good' : 'warning' },
-      ]
-    }
-  ];
+  const t = useTranslations('scoreBreakdown');
+
+  const metrics = useMemo<MetricConfig[]>(
+    () => [
+      {
+        icon: Leaf,
+        categoryKey: 'environmental',
+        score: score.environmental,
+        color: 'text-green-600',
+        bgColor: 'bg-green-50',
+        borderColor: 'border-green-200',
+        factors: [
+          { key: 'carbonEmissions', isGood: score.environmental > 70 },
+          { key: 'waterUsage', isGood: score.environmental > 60 },
+          { key: 'wasteManagement', isGood: score.environmental > 65 },
+        ],
+      },
+      {
+        icon: Users,
+        categoryKey: 'social',
+        score: score.social,
+        color: 'text-purple-600',
+        bgColor: 'bg-purple-50',
+        borderColor: 'border-purple-200',
+        factors: [
+          { key: 'employeeDiversity', isGood: score.social > 75 },
+          { key: 'communityImpact', isGood: score.social > 65 },
+          { key: 'laborPractices', isGood: score.social > 70 },
+        ],
+      },
+      {
+        icon: Shield,
+        categoryKey: 'governance',
+        score: score.governance,
+        color: 'text-amber-600',
+        bgColor: 'bg-amber-50',
+        borderColor: 'border-amber-200',
+        factors: [
+          { key: 'boardDiversity', isGood: score.governance > 65 },
+          { key: 'executivePay', isGood: score.governance > 60 },
+          { key: 'shareholderRights', isGood: score.governance > 70 },
+        ],
+      },
+    ],
+    [score.environmental, score.social, score.governance],
+  );
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h2 className="text-lg font-semibold text-gray-900 mb-4">Score Breakdown</h2>
-      
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <h2 className="mb-4 text-lg font-semibold text-gray-900">{t('title')}</h2>
+
       <div className="space-y-4">
-        {metrics.map((metric) => (
-          <div key={metric.category} className={`p-4 rounded-lg border ${metric.borderColor} ${metric.bgColor}`}>
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center space-x-2">
-                <metric.icon className={`h-4 w-4 ${metric.color}`} />
-                <span className="font-medium text-gray-900">{metric.category}</span>
-              </div>
-              <span className={`text-lg font-bold ${metric.color}`}>
-                {metric.score}
-              </span>
-            </div>
-            
-            <div className="space-y-2">
-              {metric.factors.map((factor) => (
-                <div key={factor.name} className="flex items-center justify-between text-sm">
-                  <span className="text-gray-600">{factor.name}</span>
-                  {factor.status === 'good' ? (
-                    <CheckCircle className="h-4 w-4 text-green-500" />
-                  ) : (
-                    <AlertTriangle className="h-4 w-4 text-amber-500" />
-                  )}
+        {metrics.map((metric) => {
+          const CategoryIcon = metric.icon;
+          const categoryLabel = t(`category.${metric.categoryKey}`);
+
+          return (
+            <div
+              key={metric.categoryKey}
+              className={`rounded-lg border ${metric.borderColor} ${metric.bgColor} p-4`}
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <CategoryIcon className={`h-4 w-4 ${metric.color}`} />
+                  <span className="font-medium text-gray-900">{categoryLabel}</span>
                 </div>
-              ))}
+                <span className={`text-lg font-bold ${metric.color}`}>{metric.score}</span>
+              </div>
+
+              <div className="space-y-2">
+                {metric.factors.map((factor) => {
+                  const factorLabel = t(`factors.${factor.key}`);
+
+                  return (
+                    <div
+                      key={factor.key}
+                      className="flex items-center justify-between text-sm text-gray-600"
+                    >
+                      <span>{factorLabel}</span>
+                      {factor.isGood ? (
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                      ) : (
+                        <AlertTriangle className="h-4 w-4 text-amber-500" />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

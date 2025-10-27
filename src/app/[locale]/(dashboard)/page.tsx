@@ -49,13 +49,15 @@ const esgBreakdown = [
     title: 'Environmental',
     score: 82,
     change: '+4.2 vs last month',
-    summary: 'Renewable adoption and emissions cuts accelerated across energy, tech, and consumer sectors.',
+    summary:
+      'Renewable adoption and emissions cuts accelerated across energy, tech, and consumer sectors.',
   },
   {
     title: 'Social',
     score: 76,
     change: '+1.8 vs last month',
-    summary: 'Improved labor policies offset mixed supplier audits; several diversity initiatives announced.',
+    summary:
+      'Improved labor policies offset mixed supplier audits; several diversity initiatives announced.',
   },
   {
     title: 'Governance',
@@ -75,7 +77,8 @@ const supplyChainRisks = [
   {
     region: 'Latin America',
     severity: 'Medium',
-    update: 'Water stress alerts flagged for lithium mining operations serving EV battery producers.',
+    update:
+      'Water stress alerts flagged for lithium mining operations serving EV battery producers.',
     impact: 'Projected production dip: 6.5%',
   },
   {
@@ -91,19 +94,22 @@ const sustainabilitySignals = [
     title: 'Microsoft deepens carbon removal partnerships',
     category: 'Positive',
     timestamp: '2h ago',
-    summary: 'New long-term contracts signed with two direct air capture providers to meet 2030 goals.',
+    summary:
+      'New long-term contracts signed with two direct air capture providers to meet 2030 goals.',
   },
   {
     title: 'EU investigates textile supply chain disclosures',
     category: 'Neutral',
     timestamp: '6h ago',
-    summary: 'Preliminary review requests evidence of traceability reforms from fast-fashion leaders.',
+    summary:
+      'Preliminary review requests evidence of traceability reforms from fast-fashion leaders.',
   },
   {
     title: 'Coastal manufacturing hub faces flood risk',
     category: 'Watchlist',
     timestamp: 'Yesterday',
-    summary: 'Satellite imagery highlights elevated sea-level anomalies impacting logistics routes.',
+    summary:
+      'Satellite imagery highlights elevated sea-level anomalies impacting logistics routes.',
   },
 ];
 
@@ -140,8 +146,8 @@ export default function DashboardPage() {
               Navigate sustainability performance with confidence.
             </h1>
             <p className="max-w-2xl text-lg text-white/80">
-              EcoPulse synthesizes ESG disclosures, satellite data, and news sentiment so you can surface risks, spot
-              opportunities, and guide capital toward resilient portfolios.
+              EcoPulse synthesizes ESG disclosures, satellite data, and news sentiment so you can
+              surface risks, spot opportunities, and guide capital toward resilient portfolios.
             </p>
             <div className="flex flex-wrap items-center gap-4">
               <Button size="lg" className="gap-2 bg-white text-gray-900 hover:bg-white/90">
@@ -161,7 +167,8 @@ export default function DashboardPage() {
                 <span className="font-semibold text-white">820+</span> companies tracked weekly
               </div>
               <div>
-                <span className="font-semibold text-white">140</span> countries monitored for policy signals
+                <span className="font-semibold text-white">140</span> countries monitored for policy
+                signals
               </div>
               <div>
                 <span className="font-semibold text-white">12k</span> supply chain entities mapped
@@ -171,8 +178,8 @@ export default function DashboardPage() {
           <div className="rounded-2xl border border-white/20 bg-white/10 p-6 backdrop-blur">
             <h2 className="text-lg font-medium text-white">ESG trajectory forecast</h2>
             <p className="mt-3 text-sm text-white/80">
-              Composite signal blend indicating sustained upward momentum driven by renewable expansion and policy
-              incentives.
+              Composite signal blend indicating sustained upward momentum driven by renewable
+              expansion and policy incentives.
             </p>
             <div className="mt-6 flex h-40 items-end gap-2">
               {[32, 40, 44, 52, 58, 61, 67, 72, 75, 78, 82, 86].map((value) => (
@@ -270,8 +277,8 @@ export default function DashboardPage() {
               Signal insight
             </p>
             <p className="mt-2">
-              Forecast models indicate environmental leadership continues to drive the composite score while governance
-              pressures may persist through proxy season.
+              Forecast models indicate environmental leadership continues to drive the composite
+              score while governance pressures may persist through proxy season.
             </p>
           </div>
         </div>
@@ -279,7 +286,9 @@ export default function DashboardPage() {
           <article className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">Engagement pipeline</h3>
-              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">Updated 5m ago</span>
+              <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                Updated 5m ago
+              </span>
             </div>
             <p className="mt-2 text-sm text-gray-600">
               Prioritized outreach themes across stewardship and public policy teams.
@@ -320,7 +329,8 @@ export default function DashboardPage() {
               <div>
                 <h3 className="text-lg font-semibold text-emerald-900">Watchlist automation</h3>
                 <p className="text-sm text-emerald-800">
-                  Configure AI alerts for sector volatility, regulatory change, and climate risk scenarios in one view.
+                  Configure AI alerts for sector volatility, regulatory change, and climate risk
+                  scenarios in one view.
                 </p>
               </div>
             </div>
@@ -338,7 +348,8 @@ export default function DashboardPage() {
               Supply chain watchlist
             </h2>
             <p className="text-sm text-gray-600">
-              Geospatial and sentiment signals blended with vendor exposure to flag areas requiring mitigation.
+              Geospatial and sentiment signals blended with vendor exposure to flag areas requiring
+              mitigation.
             </p>
           </div>
           <span className="flex items-center gap-2 text-xs font-medium uppercase tracking-wide text-gray-500">
@@ -348,7 +359,10 @@ export default function DashboardPage() {
         </header>
         <div className="grid gap-4 md:grid-cols-3">
           {supplyChainRisks.map(({ region, severity, update, impact }) => (
-            <article key={region} className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+            <article
+              key={region}
+              className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm"
+            >
               <div className="flex items-start justify-between">
                 <div>
                   <p className="text-sm font-medium text-gray-500">Region</p>
@@ -380,7 +394,9 @@ export default function DashboardPage() {
               <h2 id="signals" className="text-xl font-semibold text-gray-900">
                 Recent sustainability signals
               </h2>
-              <p className="text-sm text-gray-600">Curated events impacting portfolio exposure and risk posture.</p>
+              <p className="text-sm text-gray-600">
+                Curated events impacting portfolio exposure and risk posture.
+              </p>
             </div>
             <Button variant="outline" size="sm" className="border-gray-200">
               View all signals
@@ -409,7 +425,9 @@ export default function DashboardPage() {
                   </div>
                   <p className="mt-2 text-sm text-gray-600">{summary}</p>
                 </div>
-                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">{timestamp}</span>
+                <span className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                  {timestamp}
+                </span>
               </article>
             ))}
           </div>

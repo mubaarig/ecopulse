@@ -14,115 +14,105 @@ import {
   Users,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 type TrendTone = 'positive' | 'neutral' | 'negative';
 
-type StrategicHighlight = {
-  title: string;
+type StrategicHighlightConfig = {
+  key: 'esgLeaders' | 'transitionMomentum' | 'supplyChainExposure' | 'controversyAlerts';
   value: string;
-  description: string;
-  delta: string;
   icon: LucideIcon;
   tone: TrendTone;
 };
 
-type ReductionItem = {
-  label: string;
+type CoreMetricConfig = {
+  key: 'esgPerformance' | 'carbonImpact' | 'governanceScore' | 'socialImpact';
+  icon: LucideIcon;
+  value: string;
+  change: string;
+};
+
+type ReductionItemConfig = {
+  key: 'scope1' | 'scope2' | 'scope3';
   value: string;
   tone: TrendTone;
 };
 
-const strategicHighlights: StrategicHighlight[] = [
+type StewardshipItemConfig = {
+  key: 'deforestation' | 'cyberGovernance' | 'workforceEquity';
+  status: 'onTrack' | 'monitoring' | 'escalate';
+};
+
+const strategicHighlightsConfig: StrategicHighlightConfig[] = [
   {
-    title: 'ESG Leaders (AA+)',
     value: '28',
-    description: 'Companies outperforming sector peers on composite ESG score.',
-    delta: '+3 vs last quarter',
+    key: 'esgLeaders',
     icon: Leaf,
     tone: 'positive' as const,
   },
   {
-    title: 'Transition Momentum',
     value: '63%',
-    description: 'Portfolios aligned with 1.5°C scenario glide path through 2030.',
-    delta: '+4.8% MoM',
+    key: 'transitionMomentum',
     icon: Sun,
     tone: 'positive' as const,
   },
   {
-    title: 'Supply Chain Exposure',
     value: '14%',
-    description: 'Vendors rated high risk across emissions, labor, or resilience.',
-    delta: '-1.2% MoM',
+    key: 'supplyChainExposure',
     icon: Factory,
     tone: 'positive' as const,
   },
   {
-    title: 'Controversy Alerts',
     value: '7',
-    description: 'Active cases requiring stewardship team follow-up this week.',
-    delta: '+2 vs last week',
+    key: 'controversyAlerts',
     icon: ShieldCheck,
     tone: 'negative' as const,
   },
 ];
 
-const coreMetrics = [
+const coreMetricsConfig: CoreMetricConfig[] = [
   {
     icon: TrendingUp,
-    label: 'ESG Performance',
+    key: 'esgPerformance',
     value: '85.2',
     change: '+2.1%',
-    description: 'Average score across tracked companies',
   },
   {
     icon: Globe,
-    label: 'Carbon Impact',
+    key: 'carbonImpact',
     value: '12.4M',
     change: '-5.3%',
-    description: 'Tons of CO2 tracked in supply chains',
   },
   {
     icon: Shield,
-    label: 'Governance Score',
+    key: 'governanceScore',
     value: '78.9',
     change: '+1.2%',
-    description: 'Average board diversity & transparency',
   },
   {
     icon: Users,
-    label: 'Social Impact',
+    key: 'socialImpact',
     value: '82.1',
     change: '+3.4%',
-    description: 'Labor practices & community engagement',
   },
 ];
 
-const reductionBreakdown: ReductionItem[] = [
-  { label: 'Scope 1', value: '-8.4%', tone: 'positive' as const },
-  { label: 'Scope 2', value: '-5.9%', tone: 'positive' as const },
-  { label: 'Scope 3', value: '-1.7%', tone: 'neutral' as const },
+const reductionBreakdownConfig: ReductionItemConfig[] = [
+  { key: 'scope1', value: '-8.4%', tone: 'positive' as const },
+  { key: 'scope2', value: '-5.9%', tone: 'positive' as const },
+  { key: 'scope3', value: '-1.7%', tone: 'neutral' as const },
 ];
 
-const stewardshipFocus = [
-  {
-    label: 'Deforestation-free sourcing commitments',
-    owners: 'Consumer Staples',
-    status: 'On track',
-  },
-  {
-    label: 'Cyber governance disclosures',
-    owners: 'Financials',
-    status: 'Monitoring',
-  },
-  {
-    label: 'Workforce equity reporting cadence',
-    owners: 'Technology',
-    status: 'Escalate',
-  },
+const stewardshipFocusConfig: StewardshipItemConfig[] = [
+  { key: 'deforestation', status: 'onTrack' },
+  { key: 'cyberGovernance', status: 'monitoring' },
+  { key: 'workforceEquity', status: 'escalate' },
 ];
 
 export function StatsGrid() {
+  const t = useTranslations('stats');
+  const badgeTime = t('badgeTime');
+
   return (
     <section
       aria-labelledby="stats-grid"
@@ -131,22 +121,23 @@ export function StatsGrid() {
       <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h2 id="stats-grid" className="text-2xl font-semibold text-gray-900">
-            Integrated sustainability overview
+            {t('sectionTitle')}
           </h2>
-          <p className="text-sm text-gray-600">
-            Synthesizes headline momentum with underlying ESG performance and stewardship priorities.
-          </p>
+          <p className="text-sm text-gray-600">{t('sectionSubtitle')}</p>
         </div>
         <span className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-700">
           <BarChart3 className="h-4 w-4" />
-          Auto-refreshed 15 min ago
+          {t('badge', { time: badgeTime })}
         </span>
       </header>
 
       <div className="mt-8 grid gap-6 xl:grid-cols-[1.35fr_0.65fr]">
         <div className="space-y-6">
           <div className="grid gap-6 md:grid-cols-2">
-            {strategicHighlights.map(({ title, value, description, delta, icon: Icon, tone }) => {
+            {strategicHighlightsConfig.map(({ key, value, icon: Icon, tone }) => {
+              const title = t(`strategicHighlights.${key}.title`);
+              const description = t(`strategicHighlights.${key}.description`);
+              const delta = t(`strategicHighlights.${key}.delta`);
               const deltaClass =
                 tone === 'negative'
                   ? 'text-rose-500'
@@ -183,13 +174,17 @@ export function StatsGrid() {
 
           <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
             <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-gray-900">Core ESG metrics</h3>
+              <h3 className="text-base font-semibold text-gray-900">
+                {t('coreMetricsCard.title')}
+              </h3>
               <span className="text-xs font-semibold uppercase tracking-wide text-gray-400">
-                Tracked weekly
+                {t('coreMetricsCard.subtitle')}
               </span>
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-              {coreMetrics.map(({ icon: Icon, label, value, change, description }) => {
+              {coreMetricsConfig.map(({ icon: Icon, key, value, change }) => {
+                const label = t(`coreMetrics.${key}.label`);
+                const description = t(`coreMetrics.${key}.description`);
                 const isPositive = change.startsWith('+');
                 const badgeClass = isPositive
                   ? 'bg-emerald-100 text-emerald-700'
@@ -204,7 +199,9 @@ export function StatsGrid() {
                       <span className="rounded-lg bg-emerald-50 p-2 text-emerald-600">
                         <Icon className="h-5 w-5" />
                       </span>
-                      <span className={`rounded-full px-2 py-1 text-xs font-semibold ${badgeClass}`}>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs font-semibold ${badgeClass}`}
+                      >
                         {change}
                       </span>
                     </div>
@@ -225,14 +222,13 @@ export function StatsGrid() {
             <div className="flex items-center gap-3">
               <Gauge className="h-10 w-10 rounded-full bg-emerald-50 p-2 text-emerald-600" />
               <div>
-                <h3 className="text-base font-semibold text-gray-900">Emissions reduction velocity</h3>
-                <p className="text-sm text-gray-600">
-                  Twelve-month deltas across reported scopes benchmarked against science-based targets.
-                </p>
+                <h3 className="text-base font-semibold text-gray-900">{t('emissions.title')}</h3>
+                <p className="text-sm text-gray-600">{t('emissions.subtitle')}</p>
               </div>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
-              {reductionBreakdown.map(({ label, value, tone }) => {
+              {reductionBreakdownConfig.map(({ key, value, tone }) => {
+                const label = t(`emissionsBreakdown.${key}`);
                 const valueClass =
                   tone === 'positive'
                     ? 'text-emerald-600'
@@ -252,7 +248,7 @@ export function StatsGrid() {
               })}
             </ul>
             <div className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/70 px-4 py-3 text-xs text-emerald-800">
-              Accelerated Scope 1 and Scope 2 progress keeps the portfolio ahead of the 2027 reduction glide path.
+              {t('emissions.summary')}
             </div>
           </article>
 
@@ -260,24 +256,28 @@ export function StatsGrid() {
             <div className="flex items-center gap-3">
               <ShieldCheck className="h-10 w-10 rounded-full bg-gray-100 p-2 text-gray-600" />
               <div>
-                <h3 className="text-base font-semibold text-gray-900">Stewardship focus</h3>
-                <p className="text-sm text-gray-600">
-                  Engagement themes prioritized this quarter with sector ownership responsibility.
-                </p>
+                <h3 className="text-base font-semibold text-gray-900">{t('stewardship.title')}</h3>
+                <p className="text-sm text-gray-600">{t('stewardship.subtitle')}</p>
               </div>
             </div>
             <ul className="mt-4 space-y-3 text-sm">
-              {stewardshipFocus.map(({ label, owners, status }) => (
-                <li key={label} className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
-                  <div className="flex items-center justify-between">
-                    <p className="font-medium text-gray-800">{label}</p>
-                    <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
-                      {status}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-xs text-gray-500">{owners}</p>
-                </li>
-              ))}
+              {stewardshipFocusConfig.map(({ key, status }) => {
+                const label = t(`stewardship.items.${key}.label`);
+                const owners = t(`stewardship.items.${key}.owners`);
+                const statusLabel = t(`stewardship.status.${status}`);
+
+                return (
+                  <li key={key} className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-3">
+                    <div className="flex items-center justify-between">
+                      <p className="font-medium text-gray-800">{label}</p>
+                      <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+                        {statusLabel}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-gray-500">{owners}</p>
+                  </li>
+                );
+              })}
             </ul>
           </article>
         </aside>

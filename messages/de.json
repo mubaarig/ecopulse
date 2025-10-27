@@ -1,0 +1,252 @@
+{
+  "common": {
+    "search": "Suchen",
+    "loading": "Lädt …",
+    "error": "Etwas ist schief gelaufen",
+    "tryAgain": "Erneut versuchen",
+    "backToHome": "Zurück zur Startseite",
+    "back": "Zurück",
+    "logoAlt": "EcoPulse-Logo",
+    "languageButtonLabel": "Zu {locale} wechseln",
+    "localeName": {
+      "en": "Englisch",
+      "de": "Deutsch"
+    }
+  },
+  "scoreBreakdown": {
+    "title": "Score-Aufschlüsselung",
+    "category": {
+      "environmental": "Umwelt",
+      "social": "Soziales",
+      "governance": "Governance"
+    },
+    "factors": {
+      "carbonEmissions": "CO₂-Emissionen",
+      "waterUsage": "Wasserverbrauch",
+      "wasteManagement": "Abfallmanagement",
+      "employeeDiversity": "Belegschaftsdiversität",
+      "communityImpact": "Gesellschaftliche Wirkung",
+      "laborPractices": "Arbeitspraktiken",
+      "boardDiversity": "Diversität im Vorstand",
+      "executivePay": "Vergütung der Führungskräfte",
+      "shareholderRights": "Aktionärsrechte"
+    }
+  },
+  "dashboard": {
+    "heroTitle": "Nachhaltige Investment-Intelligenz",
+    "heroSubtitle": "Analysieren Sie die ESG-Leistung, prognostizieren Sie Trends und kartieren Sie Lieferkettenauswirkungen börsennotierter Unternehmen.",
+    "searchPlaceholder": "Unternehmen suchen (z. B. „Apple“, „Tesla“, „Unilever“)…",
+    "recentSearches": "Kürzlich analysierte Unternehmen",
+    "methodology": "Methodik"
+  },
+  "companySearch": {
+    "placeholder": "Nach Unternehmen, Ticker, Produkt oder ESG-Thema suchen …",
+    "ariaLabel": "Unternehmen und Lieferketten durchsuchen",
+    "badgeLabel": "KI-Discovery",
+    "title": "Suche für Unternehmens- und Lieferkettenintelligenz",
+    "subtitle": "Analysieren Sie ESG-Leistung, Offenlegungen, Kontroversen und Risikosignale börsennotierter Unternehmen in Sekunden.",
+    "lastUpdated": "Aktualisiert <strong>{time}</strong>",
+    "lastUpdatedTime": "vor 12 Minuten",
+    "filters": {
+      "all": "Alle"
+    },
+    "feedback": {
+      "companiesError": "Unternehmen konnten gerade nicht geladen werden.",
+      "metaError": "Discovery-Signale konnten gerade nicht geladen werden.",
+      "loadingMeta": "Discovery-Intelligence wird geladen...",
+      "selectSuggestion": "Wählen Sie ein vorgeschlagenes Unternehmen oder erkunden Sie eine Trendidee.",
+      "searchPrompt": "Suchen Sie nach Unternehmen oder stöbern Sie in einer aktuellen Analyst:innen-Idee.",
+      "searching": "Suche nach „{query}“…",
+      "empty": "Keine Unternehmen für „{query}“ gefunden.",
+      "results": "{count, plural, one {# Treffer} other {# Treffer}}",
+      "resultsFiltered": "{count, plural, one {# Treffer für {filter}} other {# Treffer für {filter}}}"
+    },
+    "toast": {
+      "loading": "Lade Daten für {company}...",
+      "empty": "Keine Unternehmen für „{query}“ gefunden."
+    },
+    "dropdown": {
+      "searching": "Unternehmen werden gesucht...",
+      "empty": "Keine Unternehmen für „{query}“ gefunden."
+    },
+    "buttons": {
+      "submit": "Suche starten",
+      "submitting": "Suche läuft..."
+    },
+    "suggested": {
+      "title": "Vorgeschlagene Treffer",
+      "status": {
+        "searching": "Suche läuft...",
+        "loadingMeta": "Discovery-Signale werden geladen...",
+        "results": "{count, plural, one {# Treffer} other {# Treffer}}",
+        "resultsFiltered": "{count, plural, one {# Treffer für {filter}} other {# Treffer für {filter}}}"
+      },
+      "openProfile": "Profil öffnen",
+      "loading": "Unternehmen werden gesucht...",
+      "empty": "Noch keine Unternehmen gefunden. Passen Sie die Filter an oder entdecken Sie eine Trendidee."
+    },
+    "trending": {
+      "title": "Trendthemen",
+      "description": "Entdecken Sie, was andere Analyst:innen diese Woche erkunden.",
+      "empty": "Discovery-Signale werden alle paar Minuten aktualisiert."
+    },
+    "watchlist": {
+      "title": "Watchlist-Pipelines",
+      "description": "Laden Sie gespeicherte Kohorten, um Fortschritt und Engagement zu verfolgen.",
+      "companyCount": "{count, plural, one {# Unternehmen} other {# Unternehmen}}",
+      "status": {
+        "actionRequired": "Maßnahmen erforderlich"
+      },
+      "empty": "Erstellen Sie eine Watchlist, um Lieferantenengagement, Risiko oder Offenlegungstrends zu verfolgen."
+    },
+    "tips": {
+      "title": "Natürliche Spracheingaben testen",
+      "exampleLabel": "Beispiel:",
+      "example": "„Scope-3-Nachzügler bei Automobilzulieferern mit neuen CDP-Meldungen“"
+    }
+  },
+  "company": {
+    "esgScore": "ESG-Score",
+    "overallScore": "Gesamtpunktzahl",
+    "environmental": "Umwelt",
+    "social": "Sozial",
+    "governance": "Unternehmensführung",
+    "historicalPerformance": "Historische ESG-Leistung",
+    "predictiveAnalysis": "KI-gestützte Prognosen",
+    "supplyChainOverview": "Lieferkettenübersicht",
+    "lastUpdated": "Aktualisiert {lastUpdated}",
+    "trend": {
+      "up": "Verbessernd",
+      "down": "Rückläufig",
+      "stable": "Stabil"
+    },
+    "marketCap": "Marktkapitalisierung: {value}",
+    "countries": "Länder",
+    "tonsCO2": "Tonnen CO₂",
+    "highRiskRegions": "Regionen mit hohem Risiko",
+    "supplyChain": {
+      "title": "Lieferkettenübersicht",
+      "loadingTitle": "Lieferkettenübersicht",
+      "countries": "Länder",
+      "tonsCO2": "Tonnen CO₂",
+      "highRiskRegions": "{count, plural, one {# Hochrisikoregion} other {# Hochrisikoregionen}}",
+      "riskMessage": "Diversifizieren Sie Lieferanten in Hochrisikoregionen, um Umweltauswirkungen zu mindern.",
+      "emissionsValue": "{value}T Tonnen",
+      "facilities": "{count, plural, one {# Standort} other {# Standorte}}"
+    },
+    "analysis": {
+      "title": "KI-Prognoseanalyse",
+      "loadingTitle": "KI-Prognoseanalyse",
+      "score": "Prognostizierter Score für das nächste Quartal",
+      "confidence": "KI-Vertrauen",
+      "riskFactors": "Risikofaktoren",
+      "poweredBy": "Gestützt auf Machine-Learning-Analyse historischer ESG-Trends",
+      "riskItems": {
+        "governanceDecline": "Beschleunigter Rückgang der Governance-Scores",
+        "lowScore": "Kritischer Bereich mit niedrigen Scores",
+        "highVolatility": "Hohe Volatilität in der jüngsten Performance"
+      }
+    }
+  },
+  "historicalChart": {
+    "title": "Historische ESG-Leistung",
+    "series": {
+      "overall": "Gesamt",
+      "environmental": "Umwelt",
+      "social": "Sozial",
+      "governance": "Unternehmensführung"
+    }
+  },
+  "stats": {
+    "sectionTitle": "Integrierte Nachhaltigkeitsübersicht",
+    "sectionSubtitle": "Fasst Momentum, ESG-Leistung und Stewardship-Prioritäten übersichtlich zusammen.",
+    "badge": "Vor {time} automatisch aktualisiert",
+    "badgeTime": "15 Minuten",
+    "strategicHighlights": {
+      "esgLeaders": {
+        "title": "ESG-Vorreiter (AA+)",
+        "description": "Unternehmen, die ihre Sektorpeers beim ESG-Gesamtscore übertreffen.",
+        "delta": "+3 vs. letztes Quartal"
+      },
+      "transitionMomentum": {
+        "title": "Transformationsdynamik",
+        "description": "Portfolios im Einklang mit dem 1,5°C-Pfad bis 2030.",
+        "delta": "+4,8 % M/M"
+      },
+      "supplyChainExposure": {
+        "title": "Lieferkettenexposition",
+        "description": "Zulieferer mit hohem Risiko bei Emissionen, Arbeit oder Resilienz.",
+        "delta": "-1,2 % M/M"
+      },
+      "controversyAlerts": {
+        "title": "Kontroversen-Alerts",
+        "description": "Aktive Fälle, die diese Woche ein Stewardship-Follow-up erfordern.",
+        "delta": "+2 vs. letzte Woche"
+      }
+    },
+    "coreMetricsCard": {
+      "title": "Kern-ESG-Kennzahlen",
+      "subtitle": "Wöchentlich verfolgt"
+    },
+    "coreMetrics": {
+      "esgPerformance": {
+        "label": "ESG-Leistung",
+        "description": "Durchschnittlicher Score der beobachteten Unternehmen"
+      },
+      "carbonImpact": {
+        "label": "CO₂-Fußabdruck",
+        "description": "CO₂-Emissionen in Lieferketten"
+      },
+      "governanceScore": {
+        "label": "Governance-Score",
+        "description": "Vorstandsdiversität und Transparenz"
+      },
+      "socialImpact": {
+        "label": "Soziale Wirkung",
+        "description": "Arbeitspraktiken und gesellschaftliches Engagement"
+      }
+    },
+    "emissions": {
+      "title": "Geschwindigkeit der Emissionsreduktion",
+      "subtitle": "Zwölfmonatige Veränderungen je Scope im Vergleich zu wissenschaftsbasierten Zielen.",
+      "summary": "Beschleunigte Fortschritte bei Scope 1 und 2 halten das Portfolio vor dem Reduktionspfad 2027."
+    },
+    "emissionsBreakdown": {
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3": "Scope 3"
+    },
+    "stewardship": {
+      "title": "Stewardship-Schwerpunkte",
+      "subtitle": "Engagement-Themen mit sektoraler Verantwortlichkeit im laufenden Quartal.",
+      "status": {
+        "onTrack": "Im Plan",
+        "monitoring": "Beobachtung",
+        "escalate": "Eskalieren"
+      },
+      "items": {
+        "deforestation": {
+          "label": "Verpflichtungen zu entwaldungsfreien Lieferketten",
+          "owners": "Nichtzyklischer Konsum"
+        },
+        "cyberGovernance": {
+          "label": "Transparenz in der Cyber-Governance",
+          "owners": "Finanzsektor"
+        },
+        "workforceEquity": {
+          "label": "Taktung des Berichts zur Arbeitsfairness",
+          "owners": "Technologie"
+        }
+      }
+    }
+  },
+  "header": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "methodology": "Methodik"
+    },
+    "back": "Zurück",
+    "languageToggle": "Zu {locale} wechseln",
+    "languageToggleLabel": "Sprache ändern"
+  }
+}

@@ -6,6 +6,31 @@ export interface Company {
   logoUrl?: string;
 }
 
+export interface TrendingIdea {
+  id: string;
+  label: string;
+  query: string;
+  changePercentage?: string;
+  context?: string;
+}
+
+export interface WatchlistPipeline {
+  id: string;
+  title: string;
+  subtitle?: string;
+  changePercentage?: string;
+  companyCount?: number;
+  status?: string;
+  query?: string;
+}
+
+export interface CompanySearchMeta {
+  filters: string[];
+  suggestions: Company[];
+  trendingIdeas: TrendingIdea[];
+  watchlistPipelines: WatchlistPipeline[];
+}
+
 export interface ESGScore {
   total: number;
   environmental: number;

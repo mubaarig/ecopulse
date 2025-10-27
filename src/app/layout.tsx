@@ -1,33 +1,13 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Providers } from "./providers";
-import { ToastProvider } from "@/components/ui/toast-provider";
+import { Inter } from 'next/font/google';
+import { defaultLocale } from '../../i18n/config';
+import './globals.css';
 
-import "./globals.css";
+const inter = Inter({ subsets: ['latin'] });
 
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata: Metadata = {
-  title: "EcoPulse - AI-Powered Sustainable Investment Dashboard",
-  description:
-    "Visualize and analyze the environmental, social, and governance impact of public companies.",
-};
-
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Providers>
-          <ToastProvider />
-          <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-            {children}
-          </div>
-        </Providers>
-      </body>
+    <html lang={defaultLocale}>
+      <body className={inter.className}>{children}</body>
     </html>
   );
 }

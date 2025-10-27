@@ -30,12 +30,20 @@
   },
   "include": [
     "next-env.d.ts",
+<<<<<<< HEAD
+=======
+    "vitest-env.d.ts",
+>>>>>>> develop
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
   ],
+<<<<<<< HEAD
   "exclude": [
     "node_modules"
   ]
+=======
+  "exclude": ["node_modules"]
+>>>>>>> develop
 }

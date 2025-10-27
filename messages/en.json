@@ -1,0 +1,252 @@
+{
+  "common": {
+    "search": "Search",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "tryAgain": "Try again",
+    "backToHome": "Back to home",
+    "back": "Back",
+    "logoAlt": "EcoPulse logo",
+    "languageButtonLabel": "Switch to {locale}",
+    "localeName": {
+      "en": "English",
+      "de": "Deutsch"
+    }
+  },
+  "scoreBreakdown": {
+    "title": "Score Breakdown",
+    "category": {
+      "environmental": "Environmental",
+      "social": "Social",
+      "governance": "Governance"
+    },
+    "factors": {
+      "carbonEmissions": "Carbon emissions",
+      "waterUsage": "Water usage",
+      "wasteManagement": "Waste management",
+      "employeeDiversity": "Employee diversity",
+      "communityImpact": "Community impact",
+      "laborPractices": "Labour practices",
+      "boardDiversity": "Board diversity",
+      "executivePay": "Executive pay",
+      "shareholderRights": "Shareholder rights"
+    }
+  },
+  "dashboard": {
+    "heroTitle": "Sustainable Investment Intelligence",
+    "heroSubtitle": "Analyze ESG performance, predict future trends, and map supply chain impacts of public companies.",
+    "searchPlaceholder": "Search for companies (try “Apple”, “Tesla”, “Unilever”)...",
+    "recentSearches": "Recently analysed companies",
+    "methodology": "Methodology"
+  },
+  "companySearch": {
+    "placeholder": "Search by company, ticker, product, or ESG theme...",
+    "ariaLabel": "Search companies and supply chain entities",
+    "badgeLabel": "AI discovery",
+    "title": "Company and supply chain intelligence search",
+    "subtitle": "Surface ESG performance, disclosures, controversies, and risk signals across public companies in seconds.",
+    "lastUpdated": "Updated <strong>{time}</strong>",
+    "lastUpdatedTime": "12 minutes ago",
+    "filters": {
+      "all": "All"
+    },
+    "feedback": {
+      "companiesError": "Unable to load companies right now.",
+      "metaError": "Unable to load discovery signals right now.",
+      "loadingMeta": "Loading discovery intelligence...",
+      "selectSuggestion": "Select a suggested company or explore a trending idea.",
+      "searchPrompt": "Search for companies or explore a trending analyst idea.",
+      "searching": "Searching for “{query}”…",
+      "empty": "No companies found for “{query}”.",
+      "results": "{count, plural, one {Showing # match} other {Showing # matches}}",
+      "resultsFiltered": "{count, plural, one {Showing # match for {filter}} other {Showing # matches for {filter}}}"
+    },
+    "toast": {
+      "loading": "Loading {company} data...",
+      "empty": "No companies found for “{query}”."
+    },
+    "dropdown": {
+      "searching": "Searching companies...",
+      "empty": "No companies found for “{query}”."
+    },
+    "buttons": {
+      "submit": "Run search",
+      "submitting": "Searching..."
+    },
+    "suggested": {
+      "title": "Suggested matches",
+      "status": {
+        "searching": "Searching...",
+        "loadingMeta": "Loading discovery signals...",
+        "results": "{count, plural, one {Showing # result} other {Showing # results}}",
+        "resultsFiltered": "{count, plural, one {Showing # result for {filter}} other {Showing # results for {filter}}}"
+      },
+      "openProfile": "Open profile",
+      "loading": "Searching companies...",
+      "empty": "No companies found yet. Try adjusting your filters or explore a trending idea."
+    },
+    "trending": {
+      "title": "Trending themes",
+      "description": "Jump into what other analysts are exploring this week.",
+      "empty": "Discovery signals update every few minutes."
+    },
+    "watchlist": {
+      "title": "Watchlist pipelines",
+      "description": "Load saved cohorts to monitor progress and engagement outcomes.",
+      "companyCount": "{count, plural, one {# company} other {# companies}}",
+      "status": {
+        "actionRequired": "Action required"
+      },
+      "empty": "Create a watchlist to track supplier engagement, risk, or disclosure momentum."
+    },
+    "tips": {
+      "title": "Try natural language prompts",
+      "exampleLabel": "Example:",
+      "example": "“Scope 3 laggards in automotive suppliers with new CDP filings”"
+    }
+  },
+  "company": {
+    "esgScore": "ESG score",
+    "overallScore": "Overall score",
+    "environmental": "Environmental",
+    "social": "Social",
+    "governance": "Governance",
+    "historicalPerformance": "Historical ESG performance",
+    "predictiveAnalysis": "AI-powered predictive analysis",
+    "supplyChainOverview": "Supply chain overview",
+    "lastUpdated": "Updated {lastUpdated}",
+    "trend": {
+      "up": "Improving",
+      "down": "Declining",
+      "stable": "Stable"
+    },
+    "marketCap": "Market cap: {value}",
+    "countries": "Countries",
+    "tonsCO2": "Tons CO₂",
+    "highRiskRegions": "High-risk regions",
+    "supplyChain": {
+      "title": "Supply chain overview",
+      "loadingTitle": "Supply chain overview",
+      "countries": "Countries",
+      "tonsCO2": "Tons CO₂",
+      "highRiskRegions": "{count, plural, one {# high-risk region} other {# high-risk regions}}",
+      "riskMessage": "Consider diversifying suppliers in high-risk regions to mitigate environmental impact.",
+      "emissionsValue": "{value}K tons",
+      "facilities": "{count, plural, one {# facility} other {# facilities}}"
+    },
+    "analysis": {
+      "title": "AI predictive analysis",
+      "loadingTitle": "AI predictive analysis",
+      "score": "Predicted next quarter score",
+      "confidence": "AI confidence",
+      "riskFactors": "Risk factors",
+      "poweredBy": "Powered by machine learning analysis of historical ESG trends",
+      "riskItems": {
+        "governanceDecline": "Accelerating decline in governance scores",
+        "lowScore": "Critical low score territory",
+        "highVolatility": "High volatility in recent performance"
+      }
+    }
+  },
+  "historicalChart": {
+    "title": "Historical ESG performance",
+    "series": {
+      "overall": "Overall",
+      "environmental": "Environmental",
+      "social": "Social",
+      "governance": "Governance"
+    }
+  },
+  "stats": {
+    "sectionTitle": "Integrated sustainability overview",
+    "sectionSubtitle": "Synthesizes headline momentum with underlying ESG performance and stewardship priorities.",
+    "badge": "Auto-refreshed {time} ago",
+    "badgeTime": "15 min",
+    "strategicHighlights": {
+      "esgLeaders": {
+        "title": "ESG leaders (AA+)",
+        "description": "Companies outperforming sector peers on composite ESG score.",
+        "delta": "+3 vs last quarter"
+      },
+      "transitionMomentum": {
+        "title": "Transition momentum",
+        "description": "Portfolios aligned with 1.5°C scenario glide path through 2030.",
+        "delta": "+4.8% MoM"
+      },
+      "supplyChainExposure": {
+        "title": "Supply chain exposure",
+        "description": "Vendors rated high risk across emissions, labour, or resilience.",
+        "delta": "-1.2% MoM"
+      },
+      "controversyAlerts": {
+        "title": "Controversy alerts",
+        "description": "Active cases requiring stewardship team follow-up this week.",
+        "delta": "+2 vs last week"
+      }
+    },
+    "coreMetricsCard": {
+      "title": "Core ESG metrics",
+      "subtitle": "Tracked weekly"
+    },
+    "coreMetrics": {
+      "esgPerformance": {
+        "label": "ESG performance",
+        "description": "Average score across tracked companies"
+      },
+      "carbonImpact": {
+        "label": "Carbon impact",
+        "description": "Tons of CO₂ tracked in supply chains"
+      },
+      "governanceScore": {
+        "label": "Governance score",
+        "description": "Average board diversity & transparency"
+      },
+      "socialImpact": {
+        "label": "Social impact",
+        "description": "Labour practices & community engagement"
+      }
+    },
+    "emissions": {
+      "title": "Emissions reduction velocity",
+      "subtitle": "Twelve-month deltas across reported scopes benchmarked against science-based targets.",
+      "summary": "Accelerated Scope 1 and Scope 2 progress keeps the portfolio ahead of the 2027 reduction glide path."
+    },
+    "emissionsBreakdown": {
+      "scope1": "Scope 1",
+      "scope2": "Scope 2",
+      "scope3": "Scope 3"
+    },
+    "stewardship": {
+      "title": "Stewardship focus",
+      "subtitle": "Engagement themes prioritised this quarter with sector ownership responsibility.",
+      "status": {
+        "onTrack": "On track",
+        "monitoring": "Monitoring",
+        "escalate": "Escalate"
+      },
+      "items": {
+        "deforestation": {
+          "label": "Deforestation-free sourcing commitments",
+          "owners": "Consumer staples"
+        },
+        "cyberGovernance": {
+          "label": "Cyber governance disclosures",
+          "owners": "Financials"
+        },
+        "workforceEquity": {
+          "label": "Workforce equity reporting cadence",
+          "owners": "Technology"
+        }
+      }
+    }
+  },
+  "header": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "methodology": "Methodology"
+    },
+    "back": "Back",
+    "languageToggle": "Switch to {locale}",
+    "languageToggleLabel": "Change language"
+  }
+}
