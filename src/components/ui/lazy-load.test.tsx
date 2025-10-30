@@ -18,44 +18,44 @@ describe('LazyLoad', () => {
     triggerIntersection = () => {};
 
     // Replace global IntersectionObserver with mock
-    (global as unknown as { IntersectionObserver: typeof IntersectionObserver }).IntersectionObserver =
-      vi
-        .fn((callback) => {
-          // Create trigger function to simulate intersection changes
-          triggerIntersection = (isIntersecting: boolean) => {
-            callback([
-              {
-                isIntersecting,
-                target: document.createElement('div'),
-                intersectionRatio: isIntersecting ? 1 : 0,
-                time: 0,
-                boundingClientRect: {} as DOMRectReadOnly,
-                intersectionRect: {} as DOMRectReadOnly,
-                rootBounds: null,
-              } as IntersectionObserverEntry,
-            ]);
-          };
+    (
+      global as unknown as { IntersectionObserver: typeof IntersectionObserver }
+    ).IntersectionObserver = vi.fn((callback) => {
+      // Create trigger function to simulate intersection changes
+      triggerIntersection = (isIntersecting: boolean) => {
+        callback([
+          {
+            isIntersecting,
+            target: document.createElement('div'),
+            intersectionRatio: isIntersecting ? 1 : 0,
+            time: 0,
+            boundingClientRect: {} as DOMRectReadOnly,
+            intersectionRect: {} as DOMRectReadOnly,
+            rootBounds: null,
+          } as IntersectionObserverEntry,
+        ]);
+      };
 
-          // Return mock observer instance
-          return {
-            observe,
-            disconnect,
-            takeRecords: vi.fn(),
-            unobserve: vi.fn(),
-            root: null,
-            rootMargin: '',
-            thresholds: [],
-          };
-        }) as unknown as typeof IntersectionObserver;
+      // Return mock observer instance
+      return {
+        observe,
+        disconnect,
+        takeRecords: vi.fn(),
+        unobserve: vi.fn(),
+        root: null,
+        rootMargin: '',
+        thresholds: [],
+      };
+    }) as unknown as typeof IntersectionObserver;
   });
 
   afterEach(() => {
     // Restore original IntersectionObserver after each test
     if (originalIntersectionObserver) {
-      (global as unknown as { IntersectionObserver: typeof IntersectionObserver }).IntersectionObserver =
-        originalIntersectionObserver;
+      (
+        global as unknown as { IntersectionObserver: typeof IntersectionObserver }
+      ).IntersectionObserver = originalIntersectionObserver;
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
       delete (global as Record<string, unknown>).IntersectionObserver;
     }
 
