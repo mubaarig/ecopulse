@@ -141,6 +141,132 @@ export function ScenarioSimulator({ score }: ScenarioSimulatorProps) {
   ];
 
   return (
-   
+    <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
+      <div className="flex items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center gap-2 text-sm font-semibold text-emerald-600">
+            <SlidersHorizontal className="h-4 w-4" />
+            {t('badge')}
+          </div>
+          <h2 className="mt-2 text-lg font-semibold text-gray-900">{t('title')}</h2>
+          <p className="text-sm text-gray-600">{t('subtitle')}</p>
+        </div>
+        <div
+          className={`rounded-lg px-3 py-2 text-sm font-semibold ${
+            impact.totalDelta >= 0
+              ? 'bg-emerald-50 text-emerald-700'
+              : 'bg-rose-50 text-rose-700'
+          }`}
+        >
+          {t('overallDelta', { value: deltaFormatter(impact.totalDelta) })}
+        </div>
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        <div className="space-y-5">
+          {SLIDERS.map((slider) => {
+            const value = scenario[slider.key];
+            return (
+              <div key={slider.key} className="rounded-xl border border-gray-100 p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">
+                      {t(`sliders.${slider.key}.label`)}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      {t(`sliders.${slider.key}.description`)}
+                    </p>
+                  </div>
+                  <span className="text-sm font-semibold text-gray-900">
+                    {value}
+                    {slider.unit}
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min={slider.min}
+                  max={slider.max}
+                  step={slider.step}
+                  value={value}
+                  onChange={(event) => handleChange(slider.key, Number(event.target.value))}
+                  className="mt-3 h-2 w-full cursor-pointer appearance-none rounded-full bg-gray-200 accent-emerald-500"
+                />
+                <div className="mt-2 flex justify-between text-xs text-gray-400">
+                  <span>
+                    {slider.min}
+                    {slider.unit}
+                  </span>
+                  <span>
+                    {slider.max}
+                    {slider.unit}
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="space-y-4 rounded-2xl border border-emerald-100 bg-emerald-50/40 p-5">
+          <div className="rounded-xl bg-white p-4 shadow-sm">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-gray-400">
+                  {t('adjustedScore')}
+                </p>
+                <p className="text-3xl font-semibold text-gray-900">
+                  {numberFormatter.format(impact.adjustedScores.total)}
+                </p>
+              </div>
+              <div
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  impact.totalDelta >= 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'
+                }`}
+              >
+                {deltaFormatter(impact.totalDelta)}
+              </div>
+            </div>
+            <p className="mt-2 text-xs text-gray-500">{t('adjustedHint')}</p>
+          </div>
+
+          <div className="grid gap-3">
+            {impactMetrics.map((metric) => (
+              <div
+                key={metric.key}
+                className="flex items-center justify-between rounded-lg bg-white px-3 py-2 text-sm shadow-sm"
+              >
+                <span className="font-medium text-gray-700">{metric.label}</span>
+                <span
+                  className={`font-semibold ${
+                    metric.delta >= 0 ? 'text-emerald-600' : 'text-rose-600'
+                  }`}
+                >
+                  {deltaFormatter(metric.delta)}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="rounded-xl border border-gray-200 bg-white p-4 text-sm text-gray-700">
+            <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-400">
+              <Activity className="h-4 w-4 text-emerald-500" />
+              {t('insights.title')}
+            </div>
+            <p className="mt-2">{driverLabel}</p>
+            <ul className="mt-2 space-y-1 text-xs text-gray-500">
+              <li>{t('insights.carbonPrice', { value: scenario.carbonPrice })}</li>
+              <li>{t('insights.regulation', { value: scenario.regulation })}</li>
+              <li>{t('insights.supply', { value: scenario.supplyShock })}</li>
+            </ul>
+          </div>
+
+          {impact.totalDelta < -6 && (
+            <div className="flex items-start gap-2 rounded-xl border border-amber-200 bg-white p-3 text-xs text-amber-800">
+              <AlertTriangle className="mt-0.5 h-4 w-4" />
+              <span>{t('warning')}</span>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
