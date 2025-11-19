@@ -7,6 +7,7 @@ import { HistoricalChart } from './historical-chart';
 import { SupplyChainMap } from './supply-chain-map';
 import { PredictiveAnalysis } from './predictive-analysis';
 import { ScoreBreakdown } from './score-breakdown';
+import { ScenarioSimulator } from './scenario-simulator';
 
 interface CompanyDashboardProps {
   company: CompanyDetails;
@@ -33,6 +34,7 @@ export function CompanyDashboard({ company }: CompanyDashboardProps) {
             <PredictiveAnalysis ticker={company.ticker} />
             <SupplyChainMap ticker={company.ticker} />
           </div>
+          <ScenarioSimulator score={company.esgScore} />
         </div>
       </div>
     </div>

@@ -146,6 +146,54 @@
         "lowScore": "Critical low score territory",
         "highVolatility": "High volatility in recent performance"
       }
+    },
+    "scenario": {
+      "badge": "Scenario simulator",
+      "title": "Stress-test the outlook",
+      "subtitle": "Adjust macro levers to see how carbon, regulation, and supply shocks shift ESG performance.",
+      "overallDelta": "Overall impact {value} pts",
+      "sliders": {
+        "carbonPrice": {
+          "label": "Carbon price",
+          "description": "Assumed cost per ton of CO₂e"
+        },
+        "regulation": {
+          "label": "Regulatory intensity",
+          "description": "Share of revenues exposed to new disclosure or policy rules"
+        },
+        "supplyShock": {
+          "label": "Supply disruption",
+          "description": "Probability of severe supplier disruption"
+        }
+      },
+      "adjustedScore": "Adjusted composite",
+      "adjustedHint": "Projection blends the current ESG score with simulated scenario deltas.",
+      "metrics": {
+        "environmental": "Environmental delta",
+        "social": "Social delta",
+        "governance": "Governance delta"
+      },
+      "insights": {
+        "title": "Insight pulses",
+        "carbonPrice": "Carbon price set to {value}$/t",
+        "regulation": "Regulatory intensity at {value}%",
+        "supply": "Supply-chain disruption risk at {value}%"
+      },
+      "drivers": {
+        "carbonPrice": {
+          "positive": "Higher carbon pricing adds {value} pts to environmental momentum.",
+          "negative": "Lower carbon pricing removes {value} pts from environmental progress."
+        },
+        "regulation": {
+          "positive": "Stronger regulation adds {value} pts to governance resilience.",
+          "negative": "Regulatory rollbacks subtract {value} pts from governance outlook."
+        },
+        "supplyShock": {
+          "positive": "Stabilized supply chains add {value} pts to the trajectory.",
+          "negative": "Elevated disruption risk subtracts {value} pts from the outlook."
+        }
+      },
+      "warning": "Scenario indicates elevated downside risk. Consider mitigation plans or hedges."
     }
   },
   "historicalChart": {

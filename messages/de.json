@@ -146,6 +146,54 @@
         "lowScore": "Kritischer Bereich mit niedrigen Scores",
         "highVolatility": "Hohe Volatilität in der jüngsten Performance"
       }
+    },
+    "scenario": {
+      "badge": "Szenario-Simulator",
+      "title": "Ausblick-Stresstest",
+      "subtitle": "Passen Sie Makrohebel an, um zu sehen, wie CO₂-Preise, Regulierung und Lieferkettenrisiken die ESG-Leistung verschieben.",
+      "overallDelta": "Gesamteffekt {value} Punkte",
+      "sliders": {
+        "carbonPrice": {
+          "label": "CO₂-Preis",
+          "description": "Angenommene Kosten pro Tonne CO₂e"
+        },
+        "regulation": {
+          "label": "Regulatorische Intensität",
+          "description": "Umsatzanteil, der neuen Offenlegungs- oder Politikregeln unterliegt"
+        },
+        "supplyShock": {
+          "label": "Lieferkettenstörung",
+          "description": "Wahrscheinlichkeit schwerer Zulieferausfälle"
+        }
+      },
+      "adjustedScore": "Angepasster Gesamtscore",
+      "adjustedHint": "Projektion kombiniert den aktuellen ESG-Score mit simulierten Szenario-Deltas.",
+      "metrics": {
+        "environmental": "Umweltdelta",
+        "social": "Soziales Delta",
+        "governance": "Governance-Delta"
+      },
+      "insights": {
+        "title": "Insight-Impulse",
+        "carbonPrice": "CO₂-Preis liegt bei {value}$/t",
+        "regulation": "Regulatorische Intensität bei {value} %",
+        "supply": "Risiko von Lieferkettenstörungen bei {value} %"
+      },
+      "drivers": {
+        "carbonPrice": {
+          "positive": "Höhere CO₂-Preise stärken den Umweltimpuls um {value} Punkte.",
+          "negative": "Niedrige CO₂-Preise mindern den Umweltfortschritt um {value} Punkte."
+        },
+        "regulation": {
+          "positive": "Strengere Regulierung erhöht die Governance-Resilienz um {value} Punkte.",
+          "negative": "Regulatorische Rücknahmen drücken den Governance-Ausblick um {value} Punkte."
+        },
+        "supplyShock": {
+          "positive": "Stabilere Lieferketten bringen {value} Punkte Auftrieb.",
+          "negative": "Hohes Störungsrisiko zieht den Ausblick um {value} Punkte nach unten."
+        }
+      },
+      "warning": "Szenario signalisiert erhöhtes Abwärtsrisiko. Gegenmaßnahmen oder Hedges prüfen."
     }
   },
   "historicalChart": {
